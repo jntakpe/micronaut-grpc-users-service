@@ -35,6 +35,8 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api")
     implementation("io.micronaut.mongodb:micronaut-mongo-reactive")
     implementation("io.micronaut.reactor:micronaut-reactor")
+    implementation("io.envoyproxy.protoc-gen-validate:pgv-java-grpc:0.3.0")
+    implementation("io.grpc:grpc-services:1.30.2")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     kaptTest(platform("io.micronaut:micronaut-bom:$micronautVersion"))
@@ -93,9 +95,9 @@ tasks.withType(JavaExec) {
     jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
     if (gradle.startParameter.continuous) {
         systemProperties(
-            'micronaut.io.watch.restart':'true',
-            'micronaut.io.watch.enabled':'true',
-            "micronaut.io.watch.paths":"src/main"
+                'micronaut.io.watch.restart': 'true',
+                'micronaut.io.watch.enabled': 'true',
+                "micronaut.io.watch.paths": "src/main"
         )
     }
 }
@@ -105,6 +107,7 @@ sourceSets {
         java {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/java'
+            srcDirs 'build/generated/source/proto/main/javapgv'
         }
     }
 }
@@ -115,8 +118,16 @@ protobuf {
         grpc {
             artifact = "io.grpc:protoc-gen-grpc-java:1.30.2"
         }
+        javapgv {
+            artifact = "io.envoyproxy.protoc-gen-validate:protoc-gen-validate:0.3.0"
+        }
     }
     generateProtoTasks {
-        all()*.plugins { grpc {} }
+        all()*.plugins {
+            grpc {}
+            javapgv {
+                option "lang=java"
+            }
+        }
     }
 }

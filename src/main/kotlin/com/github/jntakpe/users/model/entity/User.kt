@@ -4,8 +4,8 @@ import org.bson.types.ObjectId
 
 data class User(val username: String,
                 val email: String,
-                val firstName: String,
-                val lastName: String,
+                val firstName: String? = null,
+                val lastName: String? = null,
                 val phoneNumber: Long? = null,
                 override val id: ObjectId = ObjectId()
 ) : Identifiable {
