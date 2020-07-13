@@ -37,6 +37,7 @@ dependencies {
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.envoyproxy.protoc-gen-validate:pgv-java-grpc:0.3.0")
     implementation("io.grpc:grpc-services:1.30.2")
+    implementation("com.salesforce.servicelibs:reactor-grpc-stub:1.0.1")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     kaptTest(platform("io.micronaut:micronaut-bom:$micronautVersion"))
@@ -108,6 +109,7 @@ sourceSets {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/java'
             srcDirs 'build/generated/source/proto/main/javapgv'
+            srcDirs 'build/generated/source/proto/main/reactor'
         }
     }
 }
@@ -121,6 +123,9 @@ protobuf {
         javapgv {
             artifact = "io.envoyproxy.protoc-gen-validate:protoc-gen-validate:0.3.0"
         }
+        reactor {
+            artifact = "com.salesforce.servicelibs:reactor-grpc:1.0.1"
+        }
     }
     generateProtoTasks {
         all()*.plugins {
@@ -128,6 +133,7 @@ protobuf {
             javapgv {
                 option "lang=java"
             }
+            reactor {}
         }
     }
 }
