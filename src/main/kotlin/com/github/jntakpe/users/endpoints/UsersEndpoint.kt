@@ -13,14 +13,8 @@ class UsersEndpoint(private val userService: UserService) : ReactorUsersServiceG
 
     override fun findByUsername(request: Mono<Users.UsersByUsernameRequest>): Mono<Users.UserResponse> {
         return request
-                .map {
-                    with(Users.UserResponse.newBuilder()) {
-                        username = "jntakpe"
-                        email = "jntakpe@mail.com"
-                        lastName = "N'takpé"
-                        build()
-                    }
-                }
+                .flatMap { userService.findByUsername(it.username) }
+                .map { it.toResponse() }
     }
 
     override fun create(request: Mono<Users.UserRequest>): Mono<Users.UserResponse> {

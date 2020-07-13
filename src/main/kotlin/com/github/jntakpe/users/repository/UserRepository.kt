@@ -1,16 +1,29 @@
 package com.github.jntakpe.users.repository
 
 import com.github.jntakpe.users.model.entity.User
-import com.mongodb.reactivestreams.client.MongoClient
+import com.github.jntakpe.users.model.entity.User_.Companion.Email
+import com.github.jntakpe.users.model.entity.User_.Companion.Username
+import com.mongodb.client.model.IndexOptions
+import com.mongodb.client.model.Indexes
+import com.mongodb.reactivestreams.client.MongoDatabase
+import org.litote.kmongo.eq
+import org.litote.kmongo.reactivestreams.getCollection
+import org.litote.kmongo.reactivestreams.save
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toMono
 import javax.inject.Singleton
 
 @Singleton
-class UserRepository(client: MongoClient) {
+class UserRepository(database: MongoDatabase) {
 
-    private val collection = client.getDatabase("micronaut_users").getCollection("users", User::class.java)
+    private val collection = database.getCollection<User>()
 
-    fun create(user: User): Mono<User> {
-        return Mono.from(collection.insertOne(user)).thenReturn(user)
+    init {
+        collection.createIndex(Indexes.ascending(Username.name), IndexOptions().unique(true)).toMono().subscribe()
+        collection.createIndex(Indexes.ascending(Email.name), IndexOptions().unique(true)).toMono().subscribe()
     }
+
+    fun findByUsername(username: String): Mono<User> = collection.find(Username eq username).toMono()
+
+    fun create(user: User): Mono<User> = collection.save(user).toMono().thenReturn(user)
 }
