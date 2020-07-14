@@ -9,12 +9,14 @@ import org.litote.kmongo.Data
 
 @Data
 @Serializable
-data class User(val username: String,
-                val email: String,
-                val firstName: String? = null,
-                val lastName: String? = null,
-                val phoneNumber: Long? = null,
-                @SerialName(DB_ID) @ContextualSerialization override val id: ObjectId = ObjectId()
+data class User(
+    val username: String,
+    val email: String,
+    val countryCode: String,
+    val firstName: String? = null,
+    val lastName: String? = null,
+    val phoneNumber: String? = null,
+    @SerialName(DB_ID) @ContextualSerialization override val id: ObjectId = ObjectId()
 ) : Identifiable {
 
     override fun equals(other: Any?): Boolean {
