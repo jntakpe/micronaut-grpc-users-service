@@ -13,13 +13,13 @@ class UsersEndpoint(private val userService: UserService) : ReactorUsersServiceG
 
     override fun findByUsername(request: Mono<Users.UsersByUsernameRequest>): Mono<Users.UserResponse> {
         return request
-                .flatMap { userService.findByUsername(it.username) }
-                .map { it.toResponse() }
+            .flatMap { userService.findByUsername(it.username) }
+            .map { it.toResponse() }
     }
 
     override fun create(request: Mono<Users.UserRequest>): Mono<Users.UserResponse> {
         return request
-                .flatMap { userService.create(it.toEntity()) }
-                .map { it.toResponse() }
+            .flatMap { userService.create(it.toEntity()) }
+            .map { it.toResponse() }
     }
 }

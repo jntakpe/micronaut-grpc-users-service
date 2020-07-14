@@ -11,14 +11,15 @@ import org.jetbrains.kotlin.util.prefixIfNot
 val developmentOnly: Configuration by configurations.creating
 val kotlinVersion: String by project
 val micronautVersion: String by project
+val reactorVersion: String by project
 val kMongoVersion: String by project
 val grpcPgvVersion: String by project
 val grpcServicesVersion: String by project
 val grpcReactorVersion: String by project
-val reactorExtensionsVersion: String by project
-val junitEngineVersion: String by project
+val junitVersion: String by project
 val mockkVersion: String by project
 val assertJVersion: String by project
+val testContainersVersion: String by project
 val basePackage = "com.github.jntakpe.users"
 
 plugins {
@@ -47,14 +48,13 @@ configurations {
 dependencies {
     kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     kapt("io.micronaut:micronaut-inject-java")
-    kapt("io.micronaut:micronaut-validation")
     kapt("org.litote.kmongo:kmongo-annotation-processor:$kMongoVersion")
     implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation(platform("io.projectreactor:reactor-bom:$reactorVersion"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     implementation("javax.annotation:javax.annotation-api")
     implementation("io.micronaut:micronaut-inject")
-    implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.grpc:micronaut-grpc-runtime")
@@ -63,17 +63,21 @@ dependencies {
     implementation("io.envoyproxy.protoc-gen-validate:pgv-java-grpc:$grpcPgvVersion")
     implementation("io.grpc:grpc-services:$grpcServicesVersion")
     implementation("com.salesforce.servicelibs:reactor-grpc-stub:$grpcReactorVersion")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:$reactorExtensionsVersion")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.litote.kmongo:kmongo-async-serialization:$kMongoVersion")
     runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
     kaptTest(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     kaptTest("io.micronaut:micronaut-inject-java")
-    testImplementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("io.micronaut.test:micronaut-test-junit5")
     testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("io.projectreactor:reactor-test:")
     testImplementation("org.assertj:assertj-core:$assertJVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
+    testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
+    testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
+    testImplementation("org.testcontainers:mongodb:$testContainersVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
 application {

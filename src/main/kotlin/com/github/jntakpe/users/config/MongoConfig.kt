@@ -1,19 +1,15 @@
 package com.github.jntakpe.users.config
 
+import com.mongodb.WriteConcern.W1
+import com.mongodb.reactivestreams.client.MongoClient
 import com.mongodb.reactivestreams.client.MongoDatabase
-import io.micronaut.configuration.mongo.core.DefaultMongoConfiguration
-import io.micronaut.configuration.mongo.reactive.DefaultReactiveMongoClientFactory
 import io.micronaut.context.annotation.Factory
-import io.micronaut.context.annotation.Replaces
-import org.litote.kmongo.reactivestreams.KMongo
+import org.litote.kmongo.reactivestreams.withKMongo
 import javax.inject.Singleton
 
 @Factory
-@Replaces(factory = DefaultReactiveMongoClientFactory::class)
 class MongoConfig {
 
     @Singleton
-    fun databaseClient(config: DefaultMongoConfiguration): MongoDatabase {
-        return KMongo.createClient(config.buildSettings()).getDatabase("micronaut_users")
-    }
+    fun databaseClient(client: MongoClient): MongoDatabase = client.getDatabase("micronaut_users").withWriteConcern(W1).withKMongo()
 }
