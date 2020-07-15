@@ -130,6 +130,8 @@ protobuf {
     }
     generateProtoTasks {
         ofSourceSet("main").forEach {
+            it.generateDescriptorSet = true
+            it.descriptorSetOptions.includeImports = true
             it.plugins {
                 id(grpcId)
                 id(javaPgvId) {

@@ -7,9 +7,9 @@ import java.util.*
 import javax.inject.Singleton
 
 @Singleton
-class UserDao(database: MongoDatabase) : MongoDao<User>(database.getCollection(), SavedData) {
+class UserDao(database: MongoDatabase) : MongoDao<User>(database.getCollection(), PersistedData) {
 
-    object SavedData : TestDataProvider<User> {
+    object PersistedData : TestDataProvider<User> {
         const val JDOE_USERNAME = "jdoe"
         const val JDOE_MAIL = "jdoe@mail.com"
         const val MMOE_USERNAME = "mmoe"
