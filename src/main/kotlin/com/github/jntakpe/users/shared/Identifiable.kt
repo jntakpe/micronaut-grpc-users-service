@@ -1,4 +1,4 @@
-package com.github.jntakpe.users.model.entity
+package com.github.jntakpe.users.shared
 
 import org.bson.types.ObjectId
 

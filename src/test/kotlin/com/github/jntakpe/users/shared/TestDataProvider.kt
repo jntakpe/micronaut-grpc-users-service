@@ -1,4 +1,4 @@
-package com.github.jntakpe.users.dao
+package com.github.jntakpe.users.shared
 
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.provider.Arguments

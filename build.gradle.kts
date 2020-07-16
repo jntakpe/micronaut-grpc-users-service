@@ -81,7 +81,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "com.github.jntakpe.users.ApplicationKt"
+    mainClassName = "$basePackage.ApplicationKt"
 }
 
 java {

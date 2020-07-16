@@ -1,4 +1,4 @@
-package com.github.jntakpe.users.dao
+package com.github.jntakpe.users.shared
 
 import com.mongodb.reactivestreams.client.MongoCollection
 import org.bson.Document

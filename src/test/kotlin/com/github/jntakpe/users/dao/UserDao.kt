@@ -1,6 +1,8 @@
 package com.github.jntakpe.users.dao
 
 import com.github.jntakpe.users.model.entity.User
+import com.github.jntakpe.users.shared.MongoDao
+import com.github.jntakpe.users.shared.TestDataProvider
 import com.mongodb.reactivestreams.client.MongoDatabase
 import org.litote.kmongo.reactivestreams.getCollection
 import java.util.*

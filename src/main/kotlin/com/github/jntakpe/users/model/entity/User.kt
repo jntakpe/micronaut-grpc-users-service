@@ -1,7 +1,8 @@
 package com.github.jntakpe.users.model.entity
 
-import com.github.jntakpe.users.model.entity.Identifiable.Companion.DB_ID
-import kotlinx.serialization.ContextualSerialization
+import com.github.jershell.kbson.ObjectIdSerializer
+import com.github.jntakpe.users.shared.Identifiable
+import com.github.jntakpe.users.shared.Identifiable.Companion.DB_ID
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
@@ -16,7 +17,7 @@ data class User(
     val firstName: String? = null,
     val lastName: String? = null,
     val phoneNumber: String? = null,
-    @SerialName(DB_ID) @ContextualSerialization override val id: ObjectId = ObjectId()
+    @SerialName(DB_ID) @Serializable(ObjectIdSerializer::class) override val id: ObjectId = ObjectId()
 ) : Identifiable {
 
     override fun equals(other: Any?): Boolean {
