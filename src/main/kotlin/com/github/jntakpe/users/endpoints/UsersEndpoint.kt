@@ -9,17 +9,17 @@ import reactor.core.publisher.Mono
 import javax.inject.Singleton
 
 @Singleton
-class UsersEndpoint(private val userService: UserService) : ReactorUsersServiceGrpc.UsersServiceImplBase() {
+class UsersEndpoint(private val service: UserService) : ReactorUsersServiceGrpc.UsersServiceImplBase() {
 
     override fun findByUsername(request: Mono<Users.UsersByUsernameRequest>): Mono<Users.UserResponse> {
         return request
-            .flatMap { userService.findByUsername(it.username) }
+            .flatMap { service.findByUsername(it.username) }
             .map { it.toResponse() }
     }
 
     override fun create(request: Mono<Users.UserRequest>): Mono<Users.UserResponse> {
         return request
-            .flatMap { userService.create(it.toEntity()) }
+            .flatMap { service.create(it.toEntity()) }
             .map { it.toResponse() }
     }
 }
