@@ -19,9 +19,9 @@ class UserDao(database: MongoDatabase) : MongoDao<User>(database.getCollection()
 
         override fun data() = listOf(jdoe(), mmoe())
 
-        private fun jdoe() = User(JDOE_USERNAME, JDOE_MAIL, Locale.FRANCE.country, "John", "Doe", "+33123456789")
+        fun jdoe() = User(JDOE_USERNAME, JDOE_MAIL, Locale.FRANCE.country, "John", "Doe", "+33123456789")
 
-        private fun mmoe() = User(MMOE_USERNAME, MMOE_MAIL, Locale.ENGLISH.country)
+        fun mmoe() = User(MMOE_USERNAME, MMOE_MAIL, Locale.ENGLISH.country)
     }
 
     object TransientData : TestDataProvider<User> {

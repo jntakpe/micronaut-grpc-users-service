@@ -13,3 +13,7 @@ inline fun <reified T> T.logger(): Logger {
         LoggerFactory.getLogger(T::class.java)
     }
 }
+
+object ScriptLogger {
+    val log = logger()
+}
