@@ -6,7 +6,7 @@ import com.github.jntakpe.users.dao.UserDao.PersistedData.JDOE_USERNAME
 import com.github.jntakpe.users.dao.UserDao.PersistedData.jdoe
 import com.github.jntakpe.users.dao.UserDao.PersistedData.mmoe
 import com.github.jntakpe.users.model.entity.User
-import com.github.jntakpe.users.shared.assertCommonException
+import com.github.jntakpe.users.shared.assertStatusException
 import io.grpc.Status
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -64,7 +64,7 @@ internal class UserMappingsKtTest {
             countryCode = "ZY"
             build()
         }
-        catchThrowable { request.toEntity() }.assertCommonException(Status.INVALID_ARGUMENT)
+        catchThrowable { request.toEntity() }.assertStatusException(Status.INVALID_ARGUMENT)
     }
 
     @Test

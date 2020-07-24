@@ -3,7 +3,7 @@ package com.github.jntakpe.users.service
 import com.github.jntakpe.users.dao.UserDao
 import com.github.jntakpe.users.model.entity.User
 import com.github.jntakpe.users.repository.UserRepository
-import com.github.jntakpe.users.shared.expectCommonException
+import com.github.jntakpe.users.shared.expectStatusException
 import com.mongodb.MongoWriteException
 import com.mongodb.ServerAddress
 import com.mongodb.WriteError
@@ -55,7 +55,7 @@ internal class UserServiceTest(private val service: UserService, private val dao
     @ArgumentsSource(UserDao.PersistedData::class)
     fun `create should fail with already exists code when integrity constraint violated`(user: User) {
         service.create(user).test()
-            .expectCommonException(Status.ALREADY_EXISTS)
+            .expectStatusException(Status.ALREADY_EXISTS)
             .verify()
     }
 
@@ -65,7 +65,7 @@ internal class UserServiceTest(private val service: UserService, private val dao
         val exception = MongoWriteException(WriteError(999, "", BsonDocument.parse("{}")), ServerAddress("localhost"))
         every { mockedRepository.create(any()) } returns exception.toMono()
         UserService(mockedRepository).create(UserDao.TransientData.data().first()).test()
-            .expectCommonException(Status.INTERNAL)
+            .expectStatusException(Status.INTERNAL)
             .verify()
     }
 
@@ -74,7 +74,7 @@ internal class UserServiceTest(private val service: UserService, private val dao
         val mockedRepository = mockkClass(UserRepository::class)
         every { mockedRepository.create(any()) } returns NullPointerException("Oops").toMono()
         UserService(mockedRepository).create(UserDao.TransientData.data().first()).test()
-            .expectCommonException(Status.INTERNAL)
+            .expectStatusException(Status.INTERNAL)
             .verify()
     }
 }

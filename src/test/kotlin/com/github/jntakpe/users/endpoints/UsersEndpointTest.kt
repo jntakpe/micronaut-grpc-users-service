@@ -1,15 +1,18 @@
 package com.github.jntakpe.users.endpoints
 
+import com.github.jntakpe.users.UserRequest
 import com.github.jntakpe.users.UsersByUsernameRequest
 import com.github.jntakpe.users.UsersServiceGrpc
 import com.github.jntakpe.users.dao.UserDao
 import com.github.jntakpe.users.model.entity.User
+import com.github.jntakpe.users.shared.assertStatusException
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
 import io.micronaut.test.annotation.MicronautTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
@@ -38,5 +41,41 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
         assertThat(error).isInstanceOf(StatusRuntimeException::class.java)
         error as StatusRuntimeException
         assertThat(error.status.code).isEqualTo(Status.CANCELLED.code)
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UserDao.TransientData::class)
+    fun `create should return ok response`(user: User) {
+        val initSize = dao.count()
+        val response = serverStub.create(userRequestMapping(user))
+        assertThat(response.id).isNotNull()
+        assertThat(dao.count()).isEqualTo(initSize + 1)
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UserDao.PersistedData::class)
+    fun `create should fail when user already exists`(user: User) {
+        val initSize = dao.count()
+        catchThrowable { serverStub.create(userRequestMapping(user)) }.assertStatusException(Status.ALREADY_EXISTS)
+        assertThat(dao.count()).isEqualTo(initSize)
+    }
+
+    @Test
+    fun `create should fail when invalid request`() {
+        val request = UserRequest {
+            username = "invalid"
+            email = "wrong.mail"
+            countryCode = "FR"
+        }
+        catchThrowable { serverStub.create(request) }.assertStatusException(Status.INVALID_ARGUMENT)
+    }
+
+    private fun userRequestMapping(user: User) = UserRequest {
+        username = user.username
+        email = user.email
+        countryCode = user.countryCode
+        firstName = user.firstName.orEmpty()
+        lastName = user.lastName.orEmpty()
+        phoneNumber = user.phoneNumber.orEmpty()
     }
 }
