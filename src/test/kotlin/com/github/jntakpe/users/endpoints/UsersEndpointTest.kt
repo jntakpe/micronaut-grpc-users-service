@@ -23,7 +23,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
 
     @ParameterizedTest
     @ArgumentsSource(UserDao.PersistedData::class)
-    fun `find by username return ok response`(user: User) {
+    fun `find by username should return ok response`(user: User) {
         val request = Users.UsersByUsernameRequest.newBuilder().setUsername(user.username).build()
         val response = serverStub.findByUsername(request)
         assertThat(response.id).isNotNull()
@@ -32,7 +32,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
 
     @ParameterizedTest
     @ArgumentsSource(UserDao.TransientData::class)
-    fun `find by username fail when user does not exist`(user: User) {
+    fun `find by username should fail when user does not exist`(user: User) {
         val request = Users.UsersByUsernameRequest.newBuilder().setUsername(user.username).build()
         val error = catchThrowable { serverStub.findByUsername(request) }
         assertThat(error).isInstanceOf(StatusRuntimeException::class.java)

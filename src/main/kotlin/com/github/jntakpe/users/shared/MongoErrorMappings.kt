@@ -8,9 +8,9 @@ import org.slf4j.Logger
 
 fun <T : Identifiable> Throwable.insertError(entity: T, log: Logger): CommonException {
     return if (isDuplicateKey()) {
-        CommonException(Status.ALREADY_EXISTS.withDescription("$entity already exists").withCause(this), log::info)
+        CommonException("$entity already exists", log::info, Status.Code.ALREADY_EXISTS, this)
     } else {
-        CommonException(Status.INTERNAL.withDescription("Unable to store $entity").withCause(this), log::warn)
+        CommonException("Unable to store $entity", log::warn, Status.Code.INTERNAL, this)
     }
 }
 

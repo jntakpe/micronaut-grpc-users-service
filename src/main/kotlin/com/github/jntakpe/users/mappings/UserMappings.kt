@@ -30,5 +30,5 @@ private fun String?.removeWhitespaces() = this?.filter { !it.isWhitespace() }
 
 private fun String.resolveCountry(): String {
     return takeIf { isoCodes.contains(this) }
-        ?: throw CommonException(Status.INVALID_ARGUMENT.withDescription("Country field should an ISO3166-1 alpha-2 code"), log::debug)
+        ?: throw CommonException("Country field should an ISO3166-1 alpha-2 code", log::debug, Status.Code.INVALID_ARGUMENT)
 }
