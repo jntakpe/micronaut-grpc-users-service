@@ -1,5 +1,6 @@
 package com.github.jntakpe.users.mappings
 
+import com.github.jntakpe.users.UserResponse
 import com.github.jntakpe.users.Users
 import com.github.jntakpe.users.model.entity.User
 import com.github.jntakpe.users.shared.CommonException
@@ -10,18 +11,24 @@ import java.util.*
 private val log = ScriptLogger.log
 private val isoCodes = Locale.getISOCountries().toList()
 
-fun Users.UserRequest.toEntity() =
-    User(username, email, countryCode.resolveCountry(), firstName.orNull(), lastName.orNull(), phoneNumber.orNull().removeWhitespaces())
+fun Users.UserRequest.toEntity() = User(
+    username,
+    email,
+    countryCode.resolveCountry(),
+    firstName.orNull(),
+    lastName.orNull(),
+    phoneNumber.orNull().removeWhitespaces()
+)
 
-fun User.toResponse(): Users.UserResponse = Users.UserResponse.newBuilder().let {
-    it.username = username
-    it.email = email
-    it.firstName = firstName.orEmpty()
-    it.lastName = lastName.orEmpty()
-    it.phoneNumber = phoneNumber.orEmpty()
-    it.countryCode = countryCode
-    it.id = id.toString()
-    it.build()
+fun User.toResponse() = UserResponse {
+    val entity = this@toResponse
+    username = entity.username
+    email = entity.email
+    firstName = entity.firstName.orEmpty()
+    lastName = entity.lastName.orEmpty()
+    phoneNumber = entity.phoneNumber.orEmpty()
+    countryCode = entity.countryCode
+    id = entity.id.toString()
 }
 
 private fun String.orNull() = ifEmpty { null }

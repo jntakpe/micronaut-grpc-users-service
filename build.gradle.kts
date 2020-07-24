@@ -1,7 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.id
-import com.google.protobuf.gradle.ofSourceSet
 import com.google.protobuf.gradle.plugins
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
@@ -115,6 +114,7 @@ protobuf {
     val grpcId = "grpc"
     val javaPgvId = "javapgv"
     val reactorId = "reactor"
+    val krotoId = "kroto"
     protoc {
         artifact = "com.google.protobuf:protoc:3.12.2"
     }
@@ -128,17 +128,26 @@ protobuf {
         id(reactorId) {
             artifact = "com.salesforce.servicelibs:reactor-grpc:1.0.1"
         }
+        id(krotoId) {
+            artifact = "com.github.marcoferrer.krotoplus:protoc-gen-kroto-plus:0.6.1"
+        }
     }
     generateProtoTasks {
-        ofSourceSet("main").forEach {
+        val krotoConfig = file("kroto-config.yaml")
+        all().forEach {
             it.generateDescriptorSet = true
             it.descriptorSetOptions.includeImports = true
+            it.inputs.files(krotoConfig)
             it.plugins {
                 id(grpcId)
                 id(javaPgvId) {
                     option("lang=java")
                 }
                 id(reactorId)
+                id("kroto") {
+                    outputSubDir = "java"
+                    option("ConfigPath=$krotoConfig")
+                }
             }
         }
     }

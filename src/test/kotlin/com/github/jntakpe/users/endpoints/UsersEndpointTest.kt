@@ -1,6 +1,6 @@
 package com.github.jntakpe.users.endpoints
 
-import com.github.jntakpe.users.Users
+import com.github.jntakpe.users.UsersByUsernameRequest
 import com.github.jntakpe.users.UsersServiceGrpc
 import com.github.jntakpe.users.dao.UserDao
 import com.github.jntakpe.users.model.entity.User
@@ -24,7 +24,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
     @ParameterizedTest
     @ArgumentsSource(UserDao.PersistedData::class)
     fun `find by username should return ok response`(user: User) {
-        val request = Users.UsersByUsernameRequest.newBuilder().setUsername(user.username).build()
+        val request = UsersByUsernameRequest { username = user.username }
         val response = serverStub.findByUsername(request)
         assertThat(response.id).isNotNull()
         assertThat(response.username).isEqualTo(user.username)
@@ -33,7 +33,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
     @ParameterizedTest
     @ArgumentsSource(UserDao.TransientData::class)
     fun `find by username should fail when user does not exist`(user: User) {
-        val request = Users.UsersByUsernameRequest.newBuilder().setUsername(user.username).build()
+        val request = UsersByUsernameRequest { username = user.username }
         val error = catchThrowable { serverStub.findByUsername(request) }
         assertThat(error).isInstanceOf(StatusRuntimeException::class.java)
         error as StatusRuntimeException
