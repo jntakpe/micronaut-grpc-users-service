@@ -6,7 +6,7 @@ import io.grpc.StatusRuntimeException
 
 class CommonException(
     override val message: String,
-    val log: ErrorLoggingFunction,
+    val logging: ErrorLoggingFunction,
     code: Status.Code,
     cause: Throwable? = null,
     metadata: Metadata? = null
