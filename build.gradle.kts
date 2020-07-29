@@ -144,7 +144,7 @@ protobuf {
                     option("lang=java")
                 }
                 id(reactorId)
-                id("kroto") {
+                id(krotoId) {
                     outputSubDir = "java"
                     option("ConfigPath=$krotoConfig")
                 }

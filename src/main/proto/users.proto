@@ -5,10 +5,15 @@ option java_package = "com.github.jntakpe.users";
 package users;
 
 import "validate/validate.proto";
+import "google/api/annotations.proto";
 
 service UsersService {
-  rpc FindByUsername(UsersByUsernameRequest) returns (UserResponse) {}
-  rpc Create(UserRequest) returns (UserResponse) {}
+  rpc FindByUsername(UsersByUsernameRequest) returns (UserResponse) {
+    option (google.api.http) = {get: "/v1/users"};
+  }
+  rpc Create(UserRequest) returns (UserResponse) {
+    option (google.api.http) = {post: "/v1/users"};
+  }
 }
 
 message UsersByUsernameRequest {

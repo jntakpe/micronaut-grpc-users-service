@@ -40,7 +40,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
         val error = catchThrowable { serverStub.findByUsername(request) }
         assertThat(error).isInstanceOf(StatusRuntimeException::class.java)
         error as StatusRuntimeException
-        assertThat(error.status.code).isEqualTo(Status.CANCELLED.code)
+        assertThat(error.status.code).isEqualTo(Status.NOT_FOUND.code)
     }
 
     @ParameterizedTest

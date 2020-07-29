@@ -37,10 +37,10 @@ internal class UserServiceTest(private val service: UserService, private val dao
 
     @ParameterizedTest
     @ArgumentsSource(UserDao.TransientData::class)
-    fun `find by username return empty`(user: User) {
+    fun `find by username fail when user does not exists`(user: User) {
         service.findByUsername(user.username).test()
-            .expectNextCount(0)
-            .verifyComplete()
+            .expectStatusException(Status.NOT_FOUND)
+            .verify()
     }
 
     @ParameterizedTest
