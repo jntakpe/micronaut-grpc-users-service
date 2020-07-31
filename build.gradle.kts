@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.util.prefixIfNot
 val developmentOnly: Configuration by configurations.creating
 val kotlinVersion: String by project
 val micronautVersion: String by project
-val micronautGrpcVersion: String by project
 val reactorVersion: String by project
 val kMongoVersion: String by project
 val grpcPgvVersion: String by project
@@ -57,7 +56,7 @@ dependencies {
     implementation("io.micronaut:micronaut-inject")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut.grpc:micronaut-grpc-runtime:$micronautGrpcVersion")
+    implementation("io.micronaut.grpc:micronaut-grpc-runtime")
     implementation("io.micronaut.mongodb:micronaut-mongo-reactive")
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.envoyproxy.protoc-gen-validate:pgv-java-grpc:$grpcPgvVersion")
