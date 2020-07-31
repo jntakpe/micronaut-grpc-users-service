@@ -8,6 +8,9 @@ import "validate/validate.proto";
 import "google/api/annotations.proto";
 
 service UsersService {
+  rpc FindById(ByIdRequest) returns (UserResponse) {
+    option (google.api.http) = {get: "/v1/users/{id}"};
+  }
   rpc FindByUsername(UsersByUsernameRequest) returns (UserResponse) {
     option (google.api.http) = {get: "/v1/users"};
   }
@@ -16,8 +19,12 @@ service UsersService {
   }
 }
 
+message ByIdRequest {
+  string id = 1;
+}
+
 message UsersByUsernameRequest {
-  string username = 1;
+  string username = 1 [(validate.rules).string.len = 24];
 }
 
 message UserRequest {

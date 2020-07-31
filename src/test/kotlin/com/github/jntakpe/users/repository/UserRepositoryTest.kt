@@ -24,6 +24,23 @@ internal class UserRepositoryTest(private val repository: UserRepository, privat
 
     @ParameterizedTest
     @ArgumentsSource(UserDao.PersistedData::class)
+    fun `find by id should find one`(user: User) {
+        val id = user.id
+        repository.findById(id).test()
+            .consumeNextWith { assertThat(it.id).isEqualTo(id) }
+            .verifyComplete()
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UserDao.TransientData::class)
+    fun `find by username should return empty`(user: User) {
+        repository.findById(user.id).test()
+            .expectNextCount(0)
+            .verifyComplete()
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UserDao.PersistedData::class)
     fun `find by username should find one`(user: User) {
         val username = user.username
         repository.findByUsername(username).test()
@@ -32,7 +49,7 @@ internal class UserRepositoryTest(private val repository: UserRepository, privat
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["unknown", ""])
+    @ValueSource(strings = ["unknown", "", "*"])
     fun `find by username should return empty`(username: String) {
         repository.findByUsername(username).test()
             .expectNextCount(0)

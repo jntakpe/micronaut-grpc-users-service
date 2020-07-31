@@ -6,8 +6,10 @@ import com.github.jntakpe.users.model.entity.User_.Companion.Username
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
 import com.mongodb.reactivestreams.client.MongoDatabase
+import org.bson.types.ObjectId
 import org.litote.kmongo.eq
 import org.litote.kmongo.reactivestreams.findOne
+import org.litote.kmongo.reactivestreams.findOneById
 import org.litote.kmongo.reactivestreams.getCollection
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
@@ -22,6 +24,8 @@ class UserRepository(database: MongoDatabase) {
         collection.createIndex(Indexes.ascending(Username.name), IndexOptions().unique(true)).toMono().subscribe()
         collection.createIndex(Indexes.ascending(Email.name), IndexOptions().unique(true)).toMono().subscribe()
     }
+
+    fun findById(id: ObjectId): Mono<User> = collection.findOneById(id).toMono()
 
     fun findByUsername(username: String): Mono<User> = collection.findOne(Username eq username).toMono()
 

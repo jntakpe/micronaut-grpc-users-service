@@ -29,6 +29,22 @@ internal class UserServiceTest(private val service: UserService, private val dao
 
     @ParameterizedTest
     @ArgumentsSource(UserDao.PersistedData::class)
+    fun `find by id should return user`(user: User) {
+        service.findById(user.id).test()
+            .expectNext(user)
+            .verifyComplete()
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UserDao.TransientData::class)
+    fun `find by id fail when user does not exists`(user: User) {
+        service.findById(user.id).test()
+            .expectStatusException(Status.NOT_FOUND)
+            .verify()
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UserDao.PersistedData::class)
     fun `find by username should return user`(user: User) {
         service.findByUsername(user.username).test()
             .expectNext(user)

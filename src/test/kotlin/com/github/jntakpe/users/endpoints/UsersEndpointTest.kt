@@ -1,5 +1,6 @@
 package com.github.jntakpe.users.endpoints
 
+import com.github.jntakpe.users.ByIdRequest
 import com.github.jntakpe.users.UserRequest
 import com.github.jntakpe.users.UsersByUsernameRequest
 import com.github.jntakpe.users.UsersServiceGrpc
@@ -22,6 +23,24 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
     @BeforeEach
     fun setup() {
         dao.init()
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UserDao.PersistedData::class)
+    fun `find by id should return ok response`(user: User) {
+        val request = ByIdRequest { id = user.id.toString() }
+        val response = serverStub.findById(request)
+        assertThat(response.id).isNotNull().isEqualTo(user.id.toString())
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(UserDao.TransientData::class)
+    fun `find by id should fail when user does not exist`(user: User) {
+        val request = ByIdRequest { id = user.id.toString() }
+        val error = catchThrowable { serverStub.findById(request) }
+        assertThat(error).isInstanceOf(StatusRuntimeException::class.java)
+        error as StatusRuntimeException
+        assertThat(error.status.code).isEqualTo(Status.NOT_FOUND.code)
     }
 
     @ParameterizedTest

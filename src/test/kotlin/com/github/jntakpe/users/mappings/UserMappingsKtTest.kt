@@ -30,7 +30,7 @@ internal class UserMappingsKtTest {
 
     @Test
     fun `to entity should map full request`() {
-        val expected = jdoe()
+        val expected = jdoe
         val request = with(Users.UserRequest.newBuilder()) {
             username = JDOE_USERNAME
             email = JDOE_MAIL
@@ -69,7 +69,7 @@ internal class UserMappingsKtTest {
 
     @Test
     fun `to response should map partial`() {
-        val entity = mmoe()
+        val entity = mmoe
         val expected = with(Users.UserResponse.newBuilder()) {
             username = entity.username
             email = entity.email
@@ -85,7 +85,7 @@ internal class UserMappingsKtTest {
 
     @Test
     fun `to response should map full`() {
-        val entity = jdoe()
+        val entity = jdoe
         val expected = with(Users.UserResponse.newBuilder()) {
             username = entity.username
             email = entity.email
