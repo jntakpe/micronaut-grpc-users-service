@@ -30,6 +30,7 @@ plugins {
     id("com.google.protobuf") version "0.8.12"
     id("com.github.johnrengelman.shadow") version "6.0.0"
     application
+    idea
 }
 
 version = "0.1"
