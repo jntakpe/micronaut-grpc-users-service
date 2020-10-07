@@ -9,7 +9,7 @@ import com.github.jntakpe.users.model.entity.User
 import com.github.jntakpe.users.shared.assertStatusException
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
-import io.micronaut.test.annotation.MicronautTest
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach

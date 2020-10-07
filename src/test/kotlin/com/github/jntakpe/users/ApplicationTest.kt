@@ -1,7 +1,7 @@
 package com.github.jntakpe.users
 
 import io.micronaut.runtime.EmbeddedApplication
-import io.micronaut.test.annotation.MicronautTest
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

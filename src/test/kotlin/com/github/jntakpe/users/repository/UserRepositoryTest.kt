@@ -3,7 +3,7 @@ package com.github.jntakpe.users.repository
 import com.github.jntakpe.users.dao.UserDao
 import com.github.jntakpe.users.model.entity.User
 import com.mongodb.MongoWriteException
-import io.micronaut.test.annotation.MicronautTest
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
