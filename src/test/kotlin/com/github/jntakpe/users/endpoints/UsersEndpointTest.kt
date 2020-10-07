@@ -18,7 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
 @MicronautTest
-internal class UsersEndpointTest(private val dao: UserDao, private val serverStub: UsersServiceGrpc.UsersServiceBlockingStub) {
+internal class UsersEndpointTest(private val dao: UserDao, private val stub: UsersServiceGrpc.UsersServiceBlockingStub) {
 
     @BeforeEach
     fun setup() {
@@ -29,15 +29,15 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
     @ArgumentsSource(UserDao.PersistedData::class)
     fun `find by id should return ok response`(user: User) {
         val request = ByIdRequest { id = user.id.toString() }
-        val response = serverStub.findById(request)
-        assertThat(response.id).isNotNull().isEqualTo(user.id.toString())
+        val response = stub.findById(request)
+        assertThat(response.id).isNotEmpty().isEqualTo(user.id.toString())
     }
 
     @ParameterizedTest
     @ArgumentsSource(UserDao.TransientData::class)
     fun `find by id should fail when user does not exist`(user: User) {
         val request = ByIdRequest { id = user.id.toString() }
-        val error = catchThrowable { serverStub.findById(request) }
+        val error = catchThrowable { stub.findById(request) }
         assertThat(error).isInstanceOf(StatusRuntimeException::class.java)
         error as StatusRuntimeException
         assertThat(error.status.code).isEqualTo(Status.NOT_FOUND.code)
@@ -47,8 +47,8 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
     @ArgumentsSource(UserDao.PersistedData::class)
     fun `find by username should return ok response`(user: User) {
         val request = UsersByUsernameRequest { username = user.username }
-        val response = serverStub.findByUsername(request)
-        assertThat(response.id).isNotNull()
+        val response = stub.findByUsername(request)
+        assertThat(response.id).isNotEmpty()
         assertThat(response.username).isEqualTo(user.username)
     }
 
@@ -56,7 +56,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
     @ArgumentsSource(UserDao.TransientData::class)
     fun `find by username should fail when user does not exist`(user: User) {
         val request = UsersByUsernameRequest { username = user.username }
-        val error = catchThrowable { serverStub.findByUsername(request) }
+        val error = catchThrowable { stub.findByUsername(request) }
         assertThat(error).isInstanceOf(StatusRuntimeException::class.java)
         error as StatusRuntimeException
         assertThat(error.status.code).isEqualTo(Status.NOT_FOUND.code)
@@ -66,8 +66,8 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
     @ArgumentsSource(UserDao.TransientData::class)
     fun `create should return ok response`(user: User) {
         val initSize = dao.count()
-        val response = serverStub.create(userRequestMapping(user))
-        assertThat(response.id).isNotNull()
+        val response = stub.create(userRequestMapping(user))
+        assertThat(response.id).isNotEmpty()
         assertThat(dao.count()).isEqualTo(initSize + 1)
     }
 
@@ -75,7 +75,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
     @ArgumentsSource(UserDao.PersistedData::class)
     fun `create should fail when user already exists`(user: User) {
         val initSize = dao.count()
-        catchThrowable { serverStub.create(userRequestMapping(user)) }.assertStatusException(Status.ALREADY_EXISTS)
+        catchThrowable { stub.create(userRequestMapping(user)) }.assertStatusException(Status.ALREADY_EXISTS)
         assertThat(dao.count()).isEqualTo(initSize)
     }
 
@@ -86,7 +86,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val serverStu
             email = "wrong.mail"
             countryCode = "FR"
         }
-        catchThrowable { serverStub.create(request) }.assertStatusException(Status.INVALID_ARGUMENT)
+        catchThrowable { stub.create(request) }.assertStatusException(Status.INVALID_ARGUMENT)
     }
 
     private fun userRequestMapping(user: User) = UserRequest {
