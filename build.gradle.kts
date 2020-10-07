@@ -4,10 +4,11 @@ import com.google.protobuf.gradle.id
 import com.google.protobuf.gradle.plugins
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
+import io.micronaut.gradle.MicronautRuntime.NETTY
+import io.micronaut.gradle.MicronautTestRuntime.JUNIT_5
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.util.prefixIfNot
 
-val developmentOnly: Configuration by configurations.creating
 val kotlinVersion: String by project
 val micronautVersion: String by project
 val reactorVersion: String by project
@@ -22,15 +23,16 @@ val testContainersVersion: String by project
 val basePackage = "com.github.jntakpe.users"
 
 plugins {
+    idea
     val kotlinVersion = "1.4.10"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.allopen") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     id("com.google.protobuf") version "0.8.13"
+    id("io.micronaut.application") version "1.0.3"
+    id("com.google.cloud.tools.jib") version "2.5.0"
     id("com.github.johnrengelman.shadow") version "6.1.0"
-    application
-    idea
 }
 
 version = "0.1"
@@ -41,8 +43,15 @@ repositories {
     jcenter()
 }
 
-configurations {
-    developmentOnly
+micronaut {
+    runtime(NETTY)
+    testRuntime(JUNIT_5)
+    processing {
+        incremental(true)
+        module(project.name)
+        group(project.group.toString())
+        annotations("$basePackage.*")
+    }
 }
 
 dependencies {
@@ -81,24 +90,12 @@ dependencies {
 }
 
 application {
-    mainClassName = "$basePackage.ApplicationKt"
+    mainClassName = "com.github.jntakpe.users.ApplicationKt"
+    mainClass.set(mainClassName)
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
-}
-
-allOpen {
-    annotation("io.micronaut.aop.Around")
-}
-
-kapt {
-    arguments {
-        arg("micronaut.processing.incremental", true)
-        arg("micronaut.processing.annotations", "$basePackage.*")
-        arg("micronaut.processing.group", basePackage)
-        arg("micronaut.processing.module", "users")
-    }
 }
 
 sourceSets {
@@ -153,6 +150,12 @@ protobuf {
     }
 }
 
+jib {
+    to {
+        image = "gcr.io/demo/jib-image"
+    }
+}
+
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
@@ -160,26 +163,6 @@ tasks {
             javaParameters = true
         }
     }
-
-    withType<Test> {
-        classpath = classpath.plus(developmentOnly)
-        useJUnitPlatform()
-    }
-
-    named<JavaExec>("run") {
-        doFirst {
-            jvmArgs = listOf("-noverify", "-XX:TieredStopAtLevel=1", "-Dcom.sun.management.jmxremote")
-            classpath = classpath.plus(developmentOnly)
-            if (gradle.startParameter.isContinuous) {
-                systemProperties(
-                    "micronaut.io.watch.restart" to "true",
-                    "micronaut.io.watch.enabled" to "true",
-                    "micronaut.io.watch.paths" to "src/main"
-                )
-            }
-        }
-    }
-
     named<ShadowJar>("shadowJar") {
         mergeServiceFiles()
     }
