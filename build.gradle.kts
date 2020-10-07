@@ -90,8 +90,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "com.github.jntakpe.users.ApplicationKt"
-    mainClass.set(mainClassName)
+    mainClass.set("$basePackage.ApplicationKt")
 }
 
 java {
@@ -164,6 +163,12 @@ tasks {
         }
     }
     named<ShadowJar>("shadowJar") {
+        dependsOn("protoJar")
         mergeServiceFiles()
+    }
+    register<Jar>("protoJar") {
+        dependsOn("jar")
+        from("src/main/proto")
+        archiveClassifier.set("proto")
     }
 }
