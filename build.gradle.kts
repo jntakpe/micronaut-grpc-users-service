@@ -22,7 +22,7 @@ val testContainersVersion: String by project
 val basePackage = "com.github.jntakpe.users"
 
 plugins {
-    val kotlinVersion = "1.3.72"
+    val kotlinVersion = "1.4.10"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.allopen") version kotlinVersion
