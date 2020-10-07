@@ -27,8 +27,8 @@ plugins {
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.allopen") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
-    id("com.google.protobuf") version "0.8.12"
-    id("com.github.johnrengelman.shadow") version "6.0.0"
+    id("com.google.protobuf") version "0.8.13"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
     application
     idea
 }
@@ -116,14 +116,14 @@ protobuf {
     val reactorId = "reactor"
     val krotoId = "kroto"
     protoc {
-        artifact = "com.google.protobuf:protoc:3.12.2"
+        artifact = "com.google.protobuf:protoc:3.13.0"
     }
     plugins {
         id(grpcId) {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.30.2"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.32.1"
         }
         id(javaPgvId) {
-            artifact = "io.envoyproxy.protoc-gen-validate:protoc-gen-validate:0.3.0"
+            artifact = "io.envoyproxy.protoc-gen-validate:protoc-gen-validate:0.4.1"
         }
         id(reactorId) {
             artifact = "com.salesforce.servicelibs:reactor-grpc:1.0.1"
