@@ -4,7 +4,7 @@ import com.google.protobuf.gradle.id
 import com.google.protobuf.gradle.plugins
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
-import io.micronaut.gradle.MicronautRuntime.NETTY
+import io.micronaut.gradle.MicronautRuntime.NONE
 import io.micronaut.gradle.MicronautTestRuntime.JUNIT_5
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.util.prefixIfNot
@@ -44,7 +44,7 @@ repositories {
 }
 
 micronaut {
-    runtime(NETTY)
+    runtime(NONE)
     testRuntime(JUNIT_5)
     processing {
         incremental(true)
@@ -65,7 +65,6 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api")
     implementation("io.micronaut:micronaut-inject")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-    implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.grpc:micronaut-grpc-runtime")
     implementation("io.micronaut.mongodb:micronaut-mongo-reactive")
     implementation("io.micronaut.reactor:micronaut-reactor")

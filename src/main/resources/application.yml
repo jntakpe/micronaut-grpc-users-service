@@ -6,4 +6,4 @@ mongodb:
   automatic-class-models: false
 grpc:
   server:
-    port: 8081
+    port: 8080
