@@ -40,6 +40,7 @@ version = "0.1"
 group = "com.github.jntakpe"
 
 repositories {
+    mavenLocal()
     mavenCentral()
     jcenter()
 }
