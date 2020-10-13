@@ -24,6 +24,7 @@ val basePackage = "com.github.jntakpe.users"
 
 plugins {
     idea
+    `maven-publish`
     val kotlinVersion = "1.4.10"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
