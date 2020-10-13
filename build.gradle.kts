@@ -163,13 +163,21 @@ tasks {
             javaParameters = true
         }
     }
-    named<ShadowJar>("shadowJar") {
-        dependsOn("protoJar")
-        mergeServiceFiles()
-    }
-    register<Jar>("protoJar") {
-        dependsOn("jar")
-        from("src/main/proto")
-        archiveClassifier.set("proto")
+}
+val protoJar = tasks.register<Jar>("protoJar") {
+    dependsOn(tasks.jar)
+    from("src/main/proto")
+    archiveClassifier.set("proto")
+}
+val shadowJar = tasks.named<ShadowJar>("shadowJar") {
+    dependsOn(protoJar.name)
+    mergeServiceFiles()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenProto") {
+            artifact(tasks.getByName(protoJar.name))
+        }
     }
 }
