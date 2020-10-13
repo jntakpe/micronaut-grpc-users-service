@@ -108,6 +108,7 @@ sourceSets {
 }
 
 protobuf {
+    val grpcId = "grpc"
     val javaPgvId = "javapgv"
     val reactorId = "reactor"
     val krotoId = "kroto"
@@ -115,6 +116,9 @@ protobuf {
         artifact = "com.google.protobuf:protoc:3.13.0"
     }
     plugins {
+        id(grpcId) {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.32.1"
+        }
         id(javaPgvId) {
             artifact = "io.envoyproxy.protoc-gen-validate:protoc-gen-validate:0.4.1"
         }
@@ -132,6 +136,7 @@ protobuf {
             it.descriptorSetOptions.includeImports = true
             it.inputs.files(krotoConfig)
             it.plugins {
+                id(grpcId)
                 id(javaPgvId) {
                     option("lang=java")
                 }
