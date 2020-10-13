@@ -1,8 +1,8 @@
 package com.github.jntakpe.users.model.entity
 
 import com.github.jershell.kbson.ObjectIdSerializer
-import com.github.jntakpe.users.shared.Identifiable
-import com.github.jntakpe.users.shared.Identifiable.Companion.DB_ID
+import com.github.jntakpe.commons.Identifiable
+import com.github.jntakpe.commons.Identifiable.Companion.DB_ID
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId

@@ -9,6 +9,7 @@ import io.micronaut.gradle.MicronautTestRuntime.JUNIT_5
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.util.prefixIfNot
 
+val commonsVersion: String by project
 val kotlinVersion: String by project
 val micronautVersion: String by project
 val reactorVersion: String by project
@@ -62,6 +63,7 @@ dependencies {
     kapt("org.litote.kmongo:kmongo-annotation-processor:$kMongoVersion")
     implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     implementation(platform("io.projectreactor:reactor-bom:$reactorVersion"))
+    implementation("com.github.jntakpe:commons:$commonsVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     implementation("javax.annotation:javax.annotation-api")

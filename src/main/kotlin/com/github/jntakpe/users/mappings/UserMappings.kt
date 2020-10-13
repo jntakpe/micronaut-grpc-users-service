@@ -1,10 +1,10 @@
 package com.github.jntakpe.users.mappings
 
+import com.github.jntakpe.commons.CommonException
+import com.github.jntakpe.commons.ScriptLogger
 import com.github.jntakpe.users.UserResponse
 import com.github.jntakpe.users.Users
 import com.github.jntakpe.users.model.entity.User
-import com.github.jntakpe.users.shared.CommonException
-import com.github.jntakpe.users.shared.ScriptLogger
 import io.grpc.Status
 import java.util.*
 

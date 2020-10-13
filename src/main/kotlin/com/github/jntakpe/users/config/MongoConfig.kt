@@ -1,6 +1,6 @@
 package com.github.jntakpe.users.config
 
-import com.github.jntakpe.users.shared.IdentifiableIdController
+import com.github.jntakpe.commons.IdentifiableIdController
 import com.mongodb.WriteConcern.W1
 import com.mongodb.reactivestreams.client.MongoClient
 import com.mongodb.reactivestreams.client.MongoDatabase

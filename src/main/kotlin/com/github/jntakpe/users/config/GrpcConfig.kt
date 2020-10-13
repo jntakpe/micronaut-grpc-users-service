@@ -1,8 +1,8 @@
 package com.github.jntakpe.users.config
 
+import com.github.jntakpe.commons.ReactorExceptionLogger
 import com.github.jntakpe.users.Users
 import com.github.jntakpe.users.UsersValidator
-import com.github.jntakpe.users.shared.ReactorExceptionLogger
 import io.envoyproxy.pgv.ExplicitValidatorIndex
 import io.envoyproxy.pgv.grpc.ValidatingServerInterceptor
 import io.grpc.BindableService

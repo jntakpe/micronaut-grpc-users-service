@@ -1,10 +1,10 @@
 package com.github.jntakpe.users.service
 
+import com.github.jntakpe.commons.CommonException
+import com.github.jntakpe.commons.insertError
+import com.github.jntakpe.commons.logger
 import com.github.jntakpe.users.model.entity.User
 import com.github.jntakpe.users.repository.UserRepository
-import com.github.jntakpe.users.shared.CommonException
-import com.github.jntakpe.users.shared.insertError
-import com.github.jntakpe.users.shared.logger
 import io.grpc.Status.Code.NOT_FOUND
 import org.bson.types.ObjectId
 import reactor.core.publisher.Mono
