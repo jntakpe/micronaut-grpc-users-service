@@ -76,7 +76,7 @@ dependencies {
     implementation("io.grpc:grpc-services:$grpcServicesVersion")
     implementation("com.salesforce.servicelibs:reactor-grpc-stub:$grpcReactorVersion")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
-    implementation("org.litote.kmongo:kmongo-async-serialization:$kMongoVersion")
+    implementation("org.litote.kmongo:kmongo-reactor-serialization:$kMongoVersion")
     runtimeOnly("ch.qos.logback:logback-classic")
     kaptTest(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     kaptTest("io.micronaut:micronaut-inject-java")
