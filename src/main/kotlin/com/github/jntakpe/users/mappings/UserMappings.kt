@@ -1,7 +1,7 @@
 package com.github.jntakpe.users.mappings
 
-import com.github.jntakpe.commons.CommonException
-import com.github.jntakpe.commons.ScriptLogger
+import com.github.jntakpe.commons.context.CommonException
+import com.github.jntakpe.commons.context.ScriptLogger
 import com.github.jntakpe.users.UserResponse
 import com.github.jntakpe.users.Users
 import com.github.jntakpe.users.model.entity.User

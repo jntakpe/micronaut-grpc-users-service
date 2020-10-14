@@ -1,8 +1,8 @@
 package com.github.jntakpe.users.dao
 
+import com.github.jntakpe.commons.mongo.test.MongoDao
+import com.github.jntakpe.commons.test.TestDataProvider
 import com.github.jntakpe.users.model.entity.User
-import com.github.jntakpe.users.shared.MongoDao
-import com.github.jntakpe.users.shared.TestDataProvider
 import com.mongodb.reactivestreams.client.MongoDatabase
 import org.litote.kmongo.reactivestreams.getCollection
 import java.util.*
@@ -12,6 +12,7 @@ import javax.inject.Singleton
 class UserDao(database: MongoDatabase) : MongoDao<User>(database.getCollection(), PersistedData) {
 
     object PersistedData : TestDataProvider<User> {
+
         const val JDOE_USERNAME = "jdoe"
         const val JDOE_MAIL = "jdoe@mail.com"
         const val MMOE_USERNAME = "mmoe"
@@ -23,6 +24,7 @@ class UserDao(database: MongoDatabase) : MongoDao<User>(database.getCollection()
     }
 
     object TransientData : TestDataProvider<User> {
+
         const val RROE_USERNAME = "rroe"
         const val RROE_MAIL = "rroe@mail.com"
         const val JOHN_SMITH = "jsmith"

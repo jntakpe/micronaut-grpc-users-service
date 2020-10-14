@@ -1,9 +1,9 @@
 package com.github.jntakpe.users.service
 
+import com.github.jntakpe.commons.test.expectStatusException
 import com.github.jntakpe.users.dao.UserDao
 import com.github.jntakpe.users.model.entity.User
 import com.github.jntakpe.users.repository.UserRepository
-import com.github.jntakpe.users.shared.expectStatusException
 import com.mongodb.MongoWriteException
 import com.mongodb.ServerAddress
 import com.mongodb.WriteError

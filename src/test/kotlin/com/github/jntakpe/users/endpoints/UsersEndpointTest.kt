@@ -1,12 +1,12 @@
 package com.github.jntakpe.users.endpoints
 
+import com.github.jntakpe.commons.test.assertStatusException
 import com.github.jntakpe.users.ByIdRequest
 import com.github.jntakpe.users.UserRequest
 import com.github.jntakpe.users.UsersByUsernameRequest
 import com.github.jntakpe.users.UsersServiceGrpc
 import com.github.jntakpe.users.dao.UserDao
 import com.github.jntakpe.users.model.entity.User
-import com.github.jntakpe.users.shared.assertStatusException
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
