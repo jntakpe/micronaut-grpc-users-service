@@ -36,11 +36,8 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_githubActor: ${{ env.GITHUB_ACTOR }}
           ORG_GRADLE_PROJECT_githubToken: ${{ secrets.GITHUB_TOKEN }}
-<<<<<<< Updated upstream
-=======
       - name: Code coverage
         uses: codecov/codecov-action@v1
         with:
           file: ./build/reports/jacoco/test/jacocoTestReport.xml
           fail_ci_if_error: true
->>>>>>> Stashed changes
