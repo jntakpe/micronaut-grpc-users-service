@@ -36,15 +36,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    maven {
-        setUrl("https://maven.pkg.github.com/equidis/commons")
-        credentials {
-            val githubActor: String by project
-            val githubToken: String by project
-            username = githubActor
-            password = githubToken
-        }
-    }
+    mavenGithub("equidis/commons")
 }
 
 micronaut {
@@ -161,5 +153,19 @@ publishing {
         create<MavenPublication>("mavenProto") {
             artifact(tasks.getByName(protoJar.name))
         }
+    }
+    repositories {
+        mavenGithub("equidis/users")
+    }
+}
+
+fun RepositoryHandler.mavenGithub(repository: String) = maven {
+    name = "Github_packages"
+    setUrl("https://maven.pkg.github.com/$repository")
+    credentials {
+        val githubActor: String by project
+        val githubToken: String by project
+        username = githubActor
+        password = githubToken
     }
 }
