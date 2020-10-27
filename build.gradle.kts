@@ -18,6 +18,7 @@ val basePackage = "com.github.jntakpe"
 plugins {
     idea
     `maven-publish`
+    jacoco
     val kotlinVersion = "1.4.10"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
@@ -30,7 +31,7 @@ plugins {
 }
 
 version = "0.1.1"
-group = "com.github.jntakpe.users"
+group = "com.github.jntakpe"
 
 repositories {
     mavenLocal()
@@ -136,6 +137,15 @@ tasks {
             jvmTarget = "11"
             javaParameters = true
         }
+    }
+    jacocoTestReport {
+        dependsOn(test)
+        reports {
+            xml.isEnabled = true
+        }
+    }
+    check {
+        dependsOn(jacocoTestReport)
     }
 }
 val protoJar = tasks.register<Jar>("protoJar") {
