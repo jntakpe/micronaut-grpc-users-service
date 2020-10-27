@@ -155,7 +155,7 @@ publishing {
         }
     }
     repositories {
-        mavenGithub("equidis/users")
+        mavenGithub("equidis/micronaut-grpc-users-service")
     }
 }
 

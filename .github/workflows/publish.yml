@@ -1,19 +1,14 @@
-name: build
+name: publish
 on:
   push:
-    branches:
-      - master
-    tags-ignore:
-      - '**'
-  pull_request:
+    tags:
+      - 'v*'
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
       - name: Configure JDK
         uses: actions/setup-java@v1
         with:
@@ -26,13 +21,8 @@ jobs:
             ~/.gradle/wrapper/dists
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties', 'gradle/**') }}
           restore-keys: -${{ runner.os }}-gradle-
-      - name: Build artifacts
-        run: ./gradlew assemble
-        env:
-          ORG_GRADLE_PROJECT_githubActor: ${{ env.GITHUB_ACTOR }}
-          ORG_GRADLE_PROJECT_githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run test suite
-        run: ./gradlew check
+      - name: Publish artifacts
+        run: ./gradlew publish
         env:
           ORG_GRADLE_PROJECT_githubActor: ${{ env.GITHUB_ACTOR }}
           ORG_GRADLE_PROJECT_githubToken: ${{ secrets.GITHUB_TOKEN }}
