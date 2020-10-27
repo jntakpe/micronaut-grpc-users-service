@@ -5,6 +5,7 @@ import com.github.jntakpe.users.model.entity.User_.Companion.Email
 import com.github.jntakpe.users.model.entity.User_.Companion.Username
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.reactivestreams.client.MongoDatabase
+import com.mongodb.reactor.client.toReactor
 import org.bson.types.ObjectId
 import org.litote.kmongo.ascending
 import org.litote.kmongo.eq
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class UserRepository(database: MongoDatabase) {
 
-    private val collection = database.getCollection<User>()
+    private val collection = database.getCollection<User>().toReactor()
 
     init {
         collection.createIndex(ascending(Username), IndexOptions().unique(true)).toMono().subscribe()
