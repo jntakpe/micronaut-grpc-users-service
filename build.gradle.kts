@@ -143,6 +143,11 @@ tasks {
         reports {
             xml.isEnabled = true
         }
+        classDirectories.setFrom(
+            sourceSets.main.get().output.asFileTree.matching {
+                exclude("build/generated")
+            }
+        )
     }
     check {
         dependsOn(jacocoTestReport)
