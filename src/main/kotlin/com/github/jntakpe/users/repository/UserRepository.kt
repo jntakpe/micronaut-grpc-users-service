@@ -9,10 +9,9 @@ import com.mongodb.reactor.client.toReactor
 import org.bson.types.ObjectId
 import org.litote.kmongo.ascending
 import org.litote.kmongo.eq
+import org.litote.kmongo.reactivestreams.findOne
+import org.litote.kmongo.reactivestreams.findOneById
 import org.litote.kmongo.reactivestreams.getCollection
-import org.litote.kmongo.reactor.findOne
-import org.litote.kmongo.reactor.findOneById
-import org.litote.kmongo.reactor.insert
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import javax.inject.Singleton
@@ -27,9 +26,9 @@ class UserRepository(database: MongoDatabase) {
         collection.createIndex(ascending(Email), IndexOptions().unique(true)).toMono().subscribe()
     }
 
-    fun findById(id: ObjectId): Mono<User> = collection.findOneById(id)
+    fun findById(id: ObjectId): Mono<User> = collection.findOneById(id).toMono()
 
-    fun findByUsername(username: String): Mono<User> = collection.findOne(Username eq username)
+    fun findByUsername(username: String): Mono<User> = collection.findOne(Username eq username).toMono()
 
-    fun create(user: User): Mono<User> = collection.insert(user).thenReturn(user)
+    fun create(user: User): Mono<User> = collection.insertOne(user).thenReturn(user)
 }
