@@ -1,9 +1,9 @@
 package com.github.jntakpe.users.endpoints
 
-import com.github.jntakpe.users.ReactorUsersServiceGrpc
-import com.github.jntakpe.users.Users
 import com.github.jntakpe.users.mappings.toEntity
 import com.github.jntakpe.users.mappings.toResponse
+import com.github.jntakpe.users.proto.ReactorUsersServiceGrpc
+import com.github.jntakpe.users.proto.Users
 import com.github.jntakpe.users.service.UserService
 import org.bson.types.ObjectId
 import reactor.core.publisher.Mono

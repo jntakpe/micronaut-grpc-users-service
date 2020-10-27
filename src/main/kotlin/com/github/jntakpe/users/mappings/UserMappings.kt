@@ -2,9 +2,9 @@ package com.github.jntakpe.users.mappings
 
 import com.github.jntakpe.commons.context.CommonException
 import com.github.jntakpe.commons.context.ScriptLogger
-import com.github.jntakpe.users.UserResponse
-import com.github.jntakpe.users.Users
 import com.github.jntakpe.users.model.entity.User
+import com.github.jntakpe.users.proto.UserResponse
+import com.github.jntakpe.users.proto.Users
 import io.grpc.Status
 import java.util.*
 

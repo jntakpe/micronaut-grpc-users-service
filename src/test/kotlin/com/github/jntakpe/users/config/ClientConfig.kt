@@ -1,6 +1,6 @@
 package com.github.jntakpe.users.config
 
-import com.github.jntakpe.users.UsersServiceGrpc
+import com.github.jntakpe.users.proto.UsersServiceGrpc
 import io.grpc.ManagedChannel
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel

@@ -1,13 +1,13 @@
 package com.github.jntakpe.users.mappings
 
 import com.github.jntakpe.commons.test.assertStatusException
-import com.github.jntakpe.users.UserRequest
-import com.github.jntakpe.users.UserResponse
 import com.github.jntakpe.users.dao.UserDao.PersistedData.JDOE_MAIL
 import com.github.jntakpe.users.dao.UserDao.PersistedData.JDOE_USERNAME
 import com.github.jntakpe.users.dao.UserDao.PersistedData.jdoe
 import com.github.jntakpe.users.dao.UserDao.PersistedData.mmoe
 import com.github.jntakpe.users.model.entity.User
+import com.github.jntakpe.users.proto.UserRequest
+import com.github.jntakpe.users.proto.UserResponse
 import io.grpc.Status
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
