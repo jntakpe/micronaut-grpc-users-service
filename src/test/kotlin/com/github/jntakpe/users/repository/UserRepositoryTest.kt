@@ -16,7 +16,6 @@ import java.util.*
 @MicronautTest
 internal class UserRepositoryTest(private val repository: UserRepository, private val dao: UserDao) {
 
-
     @BeforeEach
     fun setup() {
         dao.init()
@@ -33,7 +32,7 @@ internal class UserRepositoryTest(private val repository: UserRepository, privat
 
     @ParameterizedTest
     @ArgumentsSource(UserDao.TransientData::class)
-    fun `find by username should return empty`(user: User) {
+    fun `find by id should return empty`(user: User) {
         repository.findById(user.id).test()
             .expectNextCount(0)
             .verifyComplete()
@@ -63,7 +62,7 @@ internal class UserRepositoryTest(private val repository: UserRepository, privat
         repository.create(user).test()
             .consumeNextWith {
                 assertThat(it).isEqualTo(user)
-                assertThat(dao.count()).isNotZero().isEqualTo(initSize + 1)
+                assertThat(dao.count()).isNotZero.isEqualTo(initSize + 1)
             }
             .verifyComplete()
     }
