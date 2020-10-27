@@ -36,6 +36,15 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
+    maven {
+        setUrl("https://maven.pkg.github.com/equidis/commons")
+        credentials {
+            val githubActor: String by project
+            val githubToken: String by project
+            username = githubActor
+            password = githubToken
+        }
+    }
 }
 
 micronaut {
