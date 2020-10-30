@@ -30,7 +30,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val stub: Use
     fun `find by id should return ok response`(user: User) {
         val request = ByIdRequest { id = user.id.toString() }
         val response = stub.findById(request)
-        assertThat(response.id).isNotEmpty().isEqualTo(user.id.toString())
+        assertThat(response.id).isNotEmpty.isEqualTo(user.id.toString())
     }
 
     @ParameterizedTest
@@ -48,7 +48,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val stub: Use
     fun `find by username should return ok response`(user: User) {
         val request = UsersByUsernameRequest { username = user.username }
         val response = stub.findByUsername(request)
-        assertThat(response.id).isNotEmpty()
+        assertThat(response.id).isNotEmpty
         assertThat(response.username).isEqualTo(user.username)
     }
 
@@ -67,7 +67,7 @@ internal class UsersEndpointTest(private val dao: UserDao, private val stub: Use
     fun `create should return ok response`(user: User) {
         val initSize = dao.count()
         val response = stub.create(userRequestMapping(user))
-        assertThat(response.id).isNotEmpty()
+        assertThat(response.id).isNotEmpty
         assertThat(dao.count()).isEqualTo(initSize + 1)
     }
 
@@ -80,7 +80,16 @@ internal class UsersEndpointTest(private val dao: UserDao, private val stub: Use
     }
 
     @Test
-    fun `create should fail when invalid request`() {
+    fun `create should fail when missing username`() {
+        val request = UserRequest {
+            email = "jdoe@gmail.com"
+            countryCode = "FR"
+        }
+        catchThrowable { stub.create(request) }.assertStatusException(Status.INVALID_ARGUMENT)
+    }
+
+    @Test
+    fun `create should fail when invalid email`() {
         val request = UserRequest {
             username = "invalid"
             email = "wrong.mail"
@@ -93,8 +102,8 @@ internal class UsersEndpointTest(private val dao: UserDao, private val stub: Use
         username = user.username
         email = user.email
         countryCode = user.countryCode
-        firstName = user.firstName.orEmpty()
-        lastName = user.lastName.orEmpty()
-        phoneNumber = user.phoneNumber.orEmpty()
+        user.firstName?.apply { firstName = this }
+        user.lastName?.apply { lastName = this }
+        user.phoneNumber?.apply { phoneNumber = this }
     }
 }
