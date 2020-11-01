@@ -10,6 +10,6 @@ class ApplicationTest(private val application: EmbeddedApplication<*>) {
 
     @Test
     fun `main should start application`() {
-        assertThat(application.isRunning).isTrue()
+        assertThat(application.isRunning).isTrue
     }
 }
