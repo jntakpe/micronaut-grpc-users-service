@@ -1,7 +1,7 @@
-package com.github.jntakpe.users.endpoints
+package com.github.jntakpe.users.endpoint
 
-import com.github.jntakpe.users.mappings.toEntity
-import com.github.jntakpe.users.mappings.toResponse
+import com.github.jntakpe.users.mapping.toEntity
+import com.github.jntakpe.users.mapping.toResponse
 import com.github.jntakpe.users.proto.ReactorUsersServiceGrpc
 import com.github.jntakpe.users.proto.Users
 import com.github.jntakpe.users.service.UserService

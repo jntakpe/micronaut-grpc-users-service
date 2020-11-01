@@ -1,4 +1,4 @@
-package com.github.jntakpe.users.mappings
+package com.github.jntakpe.users.mapping
 
 import com.github.jntakpe.commons.test.assertStatusException
 import com.github.jntakpe.users.dao.UserDao.PersistedData.JDOE_MAIL
