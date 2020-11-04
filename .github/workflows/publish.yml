@@ -26,3 +26,12 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_githubActor: ${{ env.GITHUB_ACTOR }}
           ORG_GRADLE_PROJECT_githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configures gcloud CLI
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          project_id: equidis
+          service_account_key: ${{ secrets.GCP_GCR_SECRET }}
+      - name: Authenticate to GCR
+        run: gcloud auth configure-docker
+      - name: Publish Docker image
+        run: ./gradlew jib
