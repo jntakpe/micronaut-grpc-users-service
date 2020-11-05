@@ -127,7 +127,7 @@ protobuf {
 
 jib {
     to {
-        image = "eu.gcr.io/equidis/micronaut-users"
+        image = "eu.gcr.io/equidis/micronaut-users:${project.version}"
     }
 }
 
