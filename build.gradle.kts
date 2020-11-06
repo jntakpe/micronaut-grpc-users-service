@@ -56,6 +56,7 @@ dependencies {
     kapt("io.micronaut:micronaut-inject-java")
     kapt("org.litote.kmongo:kmongo-annotation-processor:$kMongoVersion")
     implementation("com.github.jntakpe:commons-grpc:$commonsVersion")
+    implementation("com.github.jntakpe:commons-management:$commonsVersion")
     implementation("com.github.jntakpe:commons-micronaut:$commonsVersion")
     implementation("com.github.jntakpe:commons-mongo:$commonsVersion")
     runtimeOnly("ch.qos.logback:logback-classic")
