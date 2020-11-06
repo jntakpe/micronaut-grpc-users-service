@@ -1,12 +1,11 @@
 micronaut:
   application:
     name: users
+  server:
+    port: ${MANAGEMENT_PORT:8180}
 mongodb:
   uri: ${MONGO_PROTOCOL:mongodb}://${MONGO_CREDENTIALS:}${MONGO_HOST:`localhost:27017`}
   automatic-class-models: false
 grpc:
   server:
     port: ${SERVER_PORT:8080}
-endpoints:
-  all:
-    port: 8085
