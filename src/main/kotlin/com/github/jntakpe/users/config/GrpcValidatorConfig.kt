@@ -10,10 +10,8 @@ import javax.inject.Singleton
 class GrpcValidatorConfig {
 
     @Singleton
-    fun grpcValidators(): Iterable<GrpcValidator<*>> {
-        return listOf(
-            GrpcValidator(Users.UserRequest::class, UsersValidator.UserRequestValidator()),
-            GrpcValidator(Users.UserResponse::class, UsersValidator.UserResponseValidator())
-        )
-    }
+    fun userRequestValidator() = GrpcValidator(Users.UserRequest::class, UsersValidator.UserRequestValidator())
+
+    @Singleton
+    fun userResponseValidator() = GrpcValidator(Users.UserResponse::class, UsersValidator.UserResponseValidator())
 }
