@@ -179,8 +179,8 @@ fun RepositoryHandler.mavenGithub(repository: String) = maven {
     name = "Github_packages"
     setUrl("https://maven.pkg.github.com/$repository")
     credentials {
-        val githubActor: String by project
-        val githubToken: String by project
+        val githubActor: String? by project
+        val githubToken: String? by project
         username = githubActor
         password = githubToken
     }
