@@ -31,7 +31,9 @@ jobs:
         with:
           project_id: equidis
           service_account_key: ${{ secrets.GCP_GCR_SECRET }}
-      - name: Authenticate to GCR
-        run: gcloud auth configure-docker
+          export_default_credentials: true
       - name: Publish Docker image
-        run: ./gradlew jib
+        run: |
+          gcloud info
+          gcloud auth configure-docker
+          ./gradlew jib
