@@ -9,13 +9,13 @@ import "google/api/annotations.proto";
 
 service UsersService {
   rpc FindById(ByIdRequest) returns (UserResponse) {
-    option (google.api.http) = {get: "/v1/users/{id}"};
+    option (google.api.http) = {get: "/users/{id}"};
   }
   rpc FindByUsername(UsersByUsernameRequest) returns (UserResponse) {
-    option (google.api.http) = {get: "/v1/users"};
+    option (google.api.http) = {get: "/users"};
   }
   rpc Create(UserRequest) returns (UserResponse) {
-    option (google.api.http) = {post: "/v1/users"};
+    option (google.api.http) = {post: "/users"};
   }
 }
 
