@@ -110,6 +110,7 @@ protobuf {
         all().forEach {
             it.generateDescriptorSet = true
             it.descriptorSetOptions.includeImports = true
+            it.descriptorSetOptions.path = "${buildDir}/libs/proto.pb"
             it.inputs.files(krotoConfig)
             it.plugins {
                 id(grpcId)
