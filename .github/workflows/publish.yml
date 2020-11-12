@@ -34,24 +34,15 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-      - name: Upload Proto descriptor file
+      - name: Upload deployment metadata
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_name: protobuf-descriptor
-          asset_path: ./build/distributions/proto.pb
-          asset_content_type: application/octet-stream
-      - name: Upload Build metadata file
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_name: build-metadata
-          asset_path: ./build/distributions/build-metadata.yaml
-          asset_content_type: application/octet-stream
+          asset_name: deployment-metadata
+          asset_path: ./build/distributions/deployment-metadata.zip
+          asset_content_type: application/zip
       - name: Configures gcloud CLI
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
