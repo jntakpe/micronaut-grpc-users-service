@@ -42,6 +42,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_name: protobuf-descriptor
           asset_path: ./build/distributions/proto.pb
+          asset_content_type: application/octet-stream
       - name: Upload Build metadata file
         uses: actions/upload-release-asset@v1
         env:
@@ -50,6 +51,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_name: build-metadata
           asset_path: ./build/distributions/build-metadata.yaml
+          asset_content_type: application/octet-stream
       - name: Configures gcloud CLI
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
