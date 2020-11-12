@@ -21,11 +21,27 @@ jobs:
             ~/.gradle/wrapper/dists
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties', 'gradle/**') }}
           restore-keys: -${{ runner.os }}-gradle-
+      - name: Gradle assemble
+        run: ./gradlew assemble
+        env:
+          ORG_GRADLE_PROJECT_githubActor: ${{ env.GITHUB_ACTOR }}
+          ORG_GRADLE_PROJECT_githubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish artifacts
         run: ./gradlew publish
         env:
           ORG_GRADLE_PROJECT_githubActor: ${{ env.GITHUB_ACTOR }}
           ORG_GRADLE_PROJECT_githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configures gcloud CLI
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          project_id: equidis
+          service_account_key: ${{ secrets.GCP_GCR_SECRET }}
+          export_default_credentials: true
+      - name: Publish Docker image
+        run: |
+          gcloud info
+          gcloud auth configure-docker
+          ./gradlew jib
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -41,16 +57,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_name: deployment-metadata
-          asset_path: ./build/distributions/deployment-metadata.zip
+          asset_path: build/distributions/deployment-metadata.zip
           asset_content_type: application/zip
-      - name: Configures gcloud CLI
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          project_id: equidis
-          service_account_key: ${{ secrets.GCP_GCR_SECRET }}
-          export_default_credentials: true
-      - name: Publish Docker image
-        run: |
-          gcloud info
-          gcloud auth configure-docker
-          ./gradlew jib
