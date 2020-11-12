@@ -8,6 +8,8 @@ import io.micronaut.gradle.MicronautRuntime.NONE
 import io.micronaut.gradle.MicronautTestRuntime.JUNIT_5
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.util.prefixIfNot
+import java.nio.file.Files
+import java.nio.file.Paths
 
 val commonsVersion: String by project
 val kotlinVersion: String by project
@@ -157,7 +159,7 @@ tasks {
         dependsOn(jacocoTestReport)
     }
     assemble {
-        doLast {
+        doFirst {
             createMetadataFile()
         }
     }
@@ -194,9 +196,9 @@ fun RepositoryHandler.mavenGithub(repository: String) = maven {
     }
 }
 
-fun createMetadataFile() = File("$buildDir/distributions/build-metadata.yaml").apply {
-    writeText(
-        """
+fun createMetadataFile() = Files.createFile(Paths.get(buildDir.toString(), "distributions", "build-metadata.yaml")).apply {
+    Files.writeString(
+        this, """
         app:
           name: ${project.name}
           version: ${project.version}
