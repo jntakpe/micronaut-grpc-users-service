@@ -10,13 +10,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.util.prefixIfNot
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 
 val commonsVersion: String by project
 val kotlinVersion: String by project
 val micronautVersion: String by project
 val kMongoVersion: String by project
 val basePackage = "com.github.jntakpe"
-val protoDescriptorPath = "$buildDir/distributions/proto.pb"
+val protoDescriptorPath = "$buildDir/generated/proto.pb"
 val grpcServices = listOf("users.UsersService")
 
 plugins {
@@ -34,7 +35,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
-version = "0.1.6-RC6"
+version = "0.1.6-RC3"
 group = "com.github.jntakpe"
 
 repositories {
@@ -158,10 +159,29 @@ tasks {
     check {
         dependsOn(jacocoTestReport)
     }
-    assemble {
+    val deploymentZip = register<Zip>("deploymentZip") {
+        val path = Paths.get("$buildDir/generated/build-metadata.yaml")
         doFirst {
-            createMetadataFile()
+            if (!Files.exists(path)) Files.createFile(path)
+            Files.writeString(
+                path,
+                """
+        app:
+          name: ${project.name}
+          version: ${project.version}
+        image:
+          name: micronaut-${project.name}
+        api:
+          services: ${grpcServices.joinToString(prefix = "[", postfix = "]")}
+    """.trimIndent(), StandardOpenOption.SYNC
+            )
         }
+        archiveFileName.set("deployment-metadata.zip")
+        destinationDirectory.set(Paths.get(buildDir.toString(), "distributions").toFile())
+        from(path.toString(), protoDescriptorPath)
+    }
+    assemble {
+        dependsOn(deploymentZip)
     }
 }
 val protoJar = tasks.register<Jar>("protoJar") {
@@ -194,18 +214,4 @@ fun RepositoryHandler.mavenGithub(repository: String) = maven {
         username = githubActor
         password = githubToken
     }
-}
-
-fun createMetadataFile() = Files.createFile(Paths.get(buildDir.toString(), "distributions", "build-metadata.yaml")).apply {
-    Files.writeString(
-        this, """
-        app:
-          name: ${project.name}
-          version: ${project.version}
-        image:
-          name: micronaut-${project.name}
-        api:
-          services: ${grpcServices.joinToString(prefix = "[", postfix = "]")}
-    """.trimIndent()
-    )
 }
