@@ -14,7 +14,8 @@ val kotlinVersion: String by project
 val micronautVersion: String by project
 val kMongoVersion: String by project
 val basePackage = "com.github.jntakpe"
-val protoDescriptorPath = "${buildDir}/generated/proto.pb"
+val protoDescriptorPath = "$buildDir/distributions/proto.pb"
+val grpcServices = listOf("users.UsersService")
 
 plugins {
     idea
@@ -155,6 +156,11 @@ tasks {
     check {
         dependsOn(jacocoTestReport)
     }
+    assemble {
+        doLast {
+            createMetadataFile()
+        }
+    }
 }
 val protoJar = tasks.register<Jar>("protoJar") {
     dependsOn(tasks.jar)
@@ -186,4 +192,18 @@ fun RepositoryHandler.mavenGithub(repository: String) = maven {
         username = githubActor
         password = githubToken
     }
+}
+
+fun createMetadataFile() = File("$buildDir/distributions/build-metadata.yaml").apply {
+    writeText(
+        """
+        app:
+          name: ${project.name}
+          version: ${project.version}
+        image:
+          name: micronaut-${project.name}
+        api:
+          services: ${grpcServices.joinToString(prefix = "[", postfix = "]")}
+    """.trimIndent()
+    )
 }
