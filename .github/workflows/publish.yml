@@ -26,6 +26,29 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_githubActor: ${{ env.GITHUB_ACTOR }}
           ORG_GRADLE_PROJECT_githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+      - name: Upload Proto descriptor file
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_name: protobuf-descriptor
+          asset_path: ./build/distributions/proto.pb
+      - name: Upload Build metadata file
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_name: build-metadata
+          asset_path: ./build/distributions/build-metadata.yaml
       - name: Configures gcloud CLI
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
