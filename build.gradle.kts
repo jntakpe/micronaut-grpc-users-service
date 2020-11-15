@@ -30,7 +30,7 @@ plugins {
     kotlin("plugin.allopen") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     id("com.google.protobuf") version "0.8.13"
-    id("io.micronaut.application") version "1.0.3"
+    id("io.micronaut.application") version "1.1.0"
     id("com.google.cloud.tools.jib") version "2.6.0"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
@@ -94,11 +94,11 @@ protobuf {
     val reactorId = "reactor"
     val krotoId = "kroto"
     protoc {
-        artifact = "com.google.protobuf:protoc:3.13.0"
+        artifact = "com.google.protobuf:protoc:3.14.0"
     }
     plugins {
         id(grpcId) {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.32.1"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.33.1"
         }
         id(javaPgvId) {
             artifact = "io.envoyproxy.protoc-gen-validate:protoc-gen-validate:0.4.1"
