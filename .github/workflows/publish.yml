@@ -59,3 +59,10 @@ jobs:
           asset_name: deployment-metadata
           asset_path: build/distributions/deployment-metadata.zip
           asset_content_type: application/zip
+      - name: Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GH_DISPATCH_TOKEN }}
+          repository: equidis/cluster-config
+          event-type: new-release
+          client-payload: '{"downloadLink": "${{ steps.create_release.outputs.upload_url }}"}'
