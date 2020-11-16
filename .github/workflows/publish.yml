@@ -65,4 +65,4 @@ jobs:
           token: ${{ secrets.GH_DISPATCH_TOKEN }}
           repository: equidis/cluster-config
           event-type: new-release
-          client-payload: '{"tag": "${{ steps.create_release.outputs.tag_name }}"}'
+          client-payload: '{"tag": "${{ steps.create_release.outputs.tag_name }}", "repo": "${{ github.repository }}"}'
