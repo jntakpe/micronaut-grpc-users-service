@@ -72,7 +72,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("$basePackage.ApplicationKt")
+    mainClass.set("$basePackage.users.ApplicationKt")
 }
 
 java {
