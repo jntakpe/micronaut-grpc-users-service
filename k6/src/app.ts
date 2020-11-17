@@ -27,7 +27,7 @@ function userLifecycle(user, options: ExtendedOptions) {
     return group(`User lifecycle`, () => {
         const createdUser = userCreation(userApi, user, interval);
         if (createdUser) {
-            userRetrieval(userApi, createdUser, interval)
+            userRetrieval(userApi, createdUser, options.findIterations, interval)
             return createdUser.id;
         }
     });
@@ -52,18 +52,20 @@ function userCreation(userApi: UsersApi, user, interval: number) {
     });
 }
 
-function userRetrieval(userApi: UsersApi, user, interval: number) {
-    return group('User retrieval', () => {
-        group('Find user by id', () => {
-            checkInterval(interval, userApi.findById(user.id), okResponseChecks(user.id));
+function userRetrieval(userApi: UsersApi, user, iterations: number, interval: number) {
+    [...Array(iterations).keys()].map(_ => {
+        group('User retrieval', () => {
+            group('Find user by id', () => {
+                checkInterval(interval, userApi.findById(user.id), okResponseChecks(user.id));
+            });
+            group('Error when by does not exists', () => {
+                checkInterval(interval, userApi.findById('123456789012345678901234'), notFoundResponseChecks);
+            });
+            group('Find user by username', () => {
+                checkInterval(interval, userApi.findByUsername(user.username), okResponseChecks(user.id));
+            });
         });
-        group('Error when by does not exists', () => {
-            checkInterval(interval, userApi.findById('123456789012345678901234'), notFoundResponseChecks);
-        });
-        group('Find user by username', () => {
-            checkInterval(interval, userApi.findByUsername(user.username), okResponseChecks(user.id));
-        });
-    })
+    });
 }
 
 function contextualizeUser(user, suffix = rangeVuIterSuffix()) {
