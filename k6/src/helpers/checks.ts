@@ -1,7 +1,7 @@
-import { hasId, isConflict, isCreated, isNotFound, isOk, sameId } from './assertions';
+import { hasId, isConflict, isNotFound, isOk, sameId } from './assertions';
 
 export const createResponseChecks = {
-    'http code is created or grpc ok': isCreated,
+    'http code is ok': isOk,
     'response includes an id': hasId
 };
 

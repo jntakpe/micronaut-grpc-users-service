@@ -7,14 +7,6 @@ export function isOk(response: RefinedResponse<ResponseType>): boolean {
     return response && (response.status === 200 || response.status === grpc.StatusOK);
 }
 
-export function isCreated(response: RefinedResponse<ResponseType>): boolean {
-    return isGrpcOK(response) || response.status === 201;
-}
-
-export function isPartial(response: RefinedResponse<ResponseType>): boolean {
-    return isGrpcOK(response) || response.status === 206;
-}
-
 export function isNotFound(response: RefinedResponse<ResponseType>): boolean {
     return response.status === grpc.StatusNotFound || response.status === 404;
 }
