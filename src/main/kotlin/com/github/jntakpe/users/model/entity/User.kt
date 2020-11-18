@@ -18,7 +18,7 @@ data class User(
     val lastName: String? = null,
     val phoneNumber: String? = null,
     @SerialName(DB_ID) @Serializable(ObjectIdSerializer::class) override val id: ObjectId = ObjectId()
-) : Identifiable {
+) : Identifiable, java.io.Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
