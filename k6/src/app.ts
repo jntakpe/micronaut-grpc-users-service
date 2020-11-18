@@ -6,7 +6,8 @@ import { conflictResponseChecks, createResponseChecks, notFoundResponseChecks, o
 import { isOk } from './helpers/assertions';
 import { UsersGrpcApi } from './apis/users-grpc-api';
 
-const options = profileConfig();
+export const options = profileConfig();
+
 const userTemplate = {
     'username': 'k6test',
     'email': 'k6test@mail.com',
