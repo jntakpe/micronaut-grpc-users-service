@@ -6,9 +6,10 @@ import com.github.jntakpe.users.model.entity.User
 import com.github.jntakpe.users.proto.ByIdRequest
 import com.github.jntakpe.users.proto.UserRequest
 import com.github.jntakpe.users.proto.UsersByUsernameRequest
-import com.github.jntakpe.users.proto.UsersServiceGrpc
+import com.github.jntakpe.users.proto.UsersServiceGrpc.UsersServiceBlockingStub
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
+import io.micronaut.configuration.lettuce.cache.RedisCache
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -16,13 +17,19 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
+import javax.inject.Named
 
 @MicronautTest
-internal class UsersEndpointTest(private val dao: UserDao, private val stub: UsersServiceGrpc.UsersServiceBlockingStub) {
+internal class UsersEndpointTest(
+    private val dao: UserDao,
+    private val stub: UsersServiceBlockingStub,
+    @Named("users") private val cache: RedisCache,
+) {
 
     @BeforeEach
     fun setup() {
         dao.init()
+        cache.invalidateAll()
     }
 
     @ParameterizedTest
