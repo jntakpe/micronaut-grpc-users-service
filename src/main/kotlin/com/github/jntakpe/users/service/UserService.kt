@@ -14,19 +14,19 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-class UserService(private val repository: UserRepository, @Named("users") private val usersCacheRedis: RedisReactiveCache) {
+class UserService(private val repository: UserRepository, @Named("users") private val usersCache: RedisReactiveCache) {
 
     private val log = logger()
 
     fun findById(id: ObjectId): Mono<User> {
-        return usersCacheRedis.orPutOnCacheMiss(id) { repository.findById(id) }
+        return usersCache.orPutOnCacheMiss(id) { repository.findById(id) }
             .doOnSubscribe { log.debug("Searching user by id {}", id) }
             .doOnNext { log.debug("{} retrieved using it's id", it) }
             .switchIfEmpty(missingIdError(id).toMono())
     }
 
     fun findByUsername(username: String): Mono<User> {
-        return usersCacheRedis.orPutOnCacheMiss(username) { repository.findByUsername(username) }
+        return usersCache.orPutOnCacheMiss(username) { repository.findByUsername(username) }
             .doOnSubscribe { log.debug("Searching user by username {}", username) }
             .doOnNext { log.debug("{} retrieved using it's username", it) }
             .switchIfEmpty(missingUsernameError(username).toMono())
@@ -38,8 +38,8 @@ class UserService(private val repository: UserRepository, @Named("users") privat
             .doOnNext { log.info("{} created", it) }
             .onErrorMap { it.insertError(user, log) }
             .doOnNext {
-                usersCacheRedis.putAndForget(user.id, user)
-                usersCacheRedis.putAndForget(user.username, user)
+                usersCache.putAndForget(user.id, user)
+                usersCache.putAndForget(user.username, user)
             }
     }
 
