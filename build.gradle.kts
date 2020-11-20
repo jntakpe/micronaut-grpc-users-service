@@ -65,10 +65,10 @@ dependencies {
     implementation("com.github.jntakpe:commons-management:$commonsVersion")
     implementation("com.github.jntakpe:commons-micronaut:$commonsVersion")
     implementation("com.github.jntakpe:commons-mongo:$commonsVersion")
-    implementation("io.micronaut.redis:micronaut-redis-lettuce")
     runtimeOnly("ch.qos.logback:logback-classic")
     kaptTest(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     kaptTest("io.micronaut:micronaut-inject-java")
+    testImplementation("com.github.jntakpe:commons-cache-test:$commonsVersion")
     testImplementation("com.github.jntakpe:commons-mongo-test:$commonsVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
