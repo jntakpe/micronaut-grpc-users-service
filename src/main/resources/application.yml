@@ -7,7 +7,7 @@ mongodb:
   uri: ${MONGO_PROTOCOL:mongodb}://${MONGO_CREDENTIALS:}${MONGO_HOST:`localhost:27017`}
   automatic-class-models: false
 redis:
-  uri: ${REDIS_PROTOCOL:redis}://${MONGO_CREDENTIALS:}${REDIS_HOST:`localhost:6379`}
+  uri: ${REDIS_PROTOCOL:redis}://${REDIS_CREDENTIALS:}${REDIS_HOST:`localhost:6379`}
   io-thread-pool-size: 5
   computation-thread-pool-size: 4
   caches:
