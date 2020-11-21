@@ -6,6 +6,7 @@
   "author": "jntakpe",
   "scripts": {
     "build": "webpack",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "start": "npm run build; k6 run dist/app.bundle.js",
     "start:debug": "npm run build; k6 run --http-debug dist/app.bundle.js",
     "start:smoke": "npm run build; k6 run -e profile=smoke dist/app.bundle.js",
