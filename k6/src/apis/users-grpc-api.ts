@@ -1,6 +1,6 @@
 import { UsersApi } from './users-api';
 import { baseUrl, paths } from './url-constants';
-//@ts-ignore
+// @ts-ignore
 import * as grpc from 'k6/net/grpc';
 
 const client = new grpc.Client();

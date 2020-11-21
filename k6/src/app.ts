@@ -1,5 +1,5 @@
 import { group } from 'k6';
-import { ExtendedOptions, profileConfig } from './config/profile-config';
+import { profileConfig } from './config/profile-config';
 import { UsersApi } from './apis/users-api';
 import { checkInterval, rangeVuIterSuffix } from './helpers/utils';
 import { conflictResponseChecks, createResponseChecks, notFoundResponseChecks, okResponseChecks } from './helpers/checks';
@@ -9,26 +9,27 @@ import { UsersGrpcApi } from './apis/users-grpc-api';
 export const options = profileConfig();
 
 const userTemplate = {
-    'username': 'k6test',
-    'email': 'k6test@mail.com',
-    'first_name': 'K6',
-    'last_name': 'Test',
-    'phone_number': '123456789',
-    'country_code': 'FR'
+    username: 'k6test',
+    email: 'k6test@mail.com',
+    first_name: 'K6',
+    last_name: 'Test',
+    phone_number: '123456789',
+    country_code: 'FR'
 }
 
 export default () => {
-    userLifecycle(contextualizeUser(userTemplate), options);
+    userLifecycle(contextualizeUser(userTemplate));
 }
 
-function userLifecycle(user, options: ExtendedOptions) {
+function userLifecycle(user) {
     const interval = options.callInterval;
     const userApi = new UsersGrpcApi();
-    //or const userApi = new UsersRestApi();
+    // or const userApi = new UsersRestApi();
     return group(`User lifecycle`, () => {
         const createdUser = userCreation(userApi, user, interval);
         if (createdUser) {
-            userRetrieval(userApi, createdUser, options.findIterations, interval)
+            userRetrieval(userApi, createdUser, options.findIterations, interval);
+            missingUser(userApi, options.findIterations);
             return createdUser.id;
         }
     });
@@ -53,14 +54,17 @@ function userCreation(userApi: UsersApi, user, interval: number) {
     });
 }
 
+function missingUser(userApi: UsersApi, interval: number) {
+    group('Error when by does not exists', () => {
+        checkInterval(interval, userApi.findById('123456789012345678901234'), notFoundResponseChecks);
+    });
+}
+
 function userRetrieval(userApi: UsersApi, user, iterations: number, interval: number) {
     [...Array(iterations).keys()].map(_ => {
         group('User retrieval', () => {
             group('Find user by id', () => {
                 checkInterval(interval, userApi.findById(user.id), okResponseChecks(user.id));
-            });
-            group('Error when by does not exists', () => {
-                checkInterval(interval, userApi.findById('123456789012345678901234'), notFoundResponseChecks);
             });
             group('Find user by username', () => {
                 checkInterval(interval, userApi.findByUsername(user.username), okResponseChecks(user.id));

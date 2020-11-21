@@ -1,6 +1,6 @@
 import { RefinedResponse, ResponseType } from 'k6/http';
 import { bodyId } from './utils';
-//@ts-ignore
+// @ts-ignore
 import * as grpc from 'k6/net/grpc';
 
 export function isOk(response: RefinedResponse<ResponseType>): boolean {
