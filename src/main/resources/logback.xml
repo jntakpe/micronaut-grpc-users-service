@@ -11,6 +11,6 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
-    <logger name="com.github.jntakpe" level="TRACE"/>
+    <logger name="com.github.jntakpe" level="DEBUG"/>
     <logger name="org.mongodb" level="WARN"/>
 </configuration>
