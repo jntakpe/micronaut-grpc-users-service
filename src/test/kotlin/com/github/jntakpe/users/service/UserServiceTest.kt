@@ -3,6 +3,7 @@ package com.github.jntakpe.users.service
 import com.github.jntakpe.commons.cache.RedisReactiveCache
 import com.github.jntakpe.commons.test.expectStatusException
 import com.github.jntakpe.users.dao.UserDao
+import com.github.jntakpe.users.dao.UserDao.PersistedData
 import com.github.jntakpe.users.dao.UserDao.TransientData
 import com.github.jntakpe.users.model.entity.User
 import com.github.jntakpe.users.repository.UserRepository
@@ -44,7 +45,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.PersistedData::class)
+    @ArgumentsSource(PersistedData::class)
     fun `find by id should return user`(user: User) {
         service.findById(user.id).test()
             .expectNext(user)
@@ -52,7 +53,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.PersistedData::class)
+    @ArgumentsSource(PersistedData::class)
     fun `find by id should call repository since cache miss`(user: User) {
         val repoSpy = spyk(userRepository)
         UserService(repoSpy, usersCache).findById(user.id).test()
@@ -66,7 +67,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.PersistedData::class)
+    @ArgumentsSource(PersistedData::class)
     fun `find by id should not call repository since retrieved from cache`(user: User) {
         rawCache.put(user.id, user)
         val repoSpy = spyk(userRepository)
@@ -88,7 +89,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.PersistedData::class)
+    @ArgumentsSource(PersistedData::class)
     fun `find by username should return user`(user: User) {
         service.findByUsername(user.username).test()
             .expectNext(user)
@@ -96,7 +97,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.PersistedData::class)
+    @ArgumentsSource(PersistedData::class)
     fun `find by username should call repository since cache miss`(user: User) {
         val repoSpy = spyk(userRepository)
         UserService(repoSpy, usersCache).findByUsername(user.username).test()
@@ -110,7 +111,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.PersistedData::class)
+    @ArgumentsSource(PersistedData::class)
     fun `find by username should not call repository since retrieved from cache`(user: User) {
         rawCache.put(user.username, user)
         val repoSpy = spyk(userRepository)
@@ -156,7 +157,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.PersistedData::class)
+    @ArgumentsSource(PersistedData::class)
     fun `create should fail with already exists code when integrity constraint violated`(user: User) {
         service.create(user).test()
             .expectStatusException(Status.ALREADY_EXISTS)
