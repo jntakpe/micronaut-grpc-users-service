@@ -3,6 +3,7 @@ package com.github.jntakpe.users.service
 import com.github.jntakpe.commons.cache.RedisReactiveCache
 import com.github.jntakpe.commons.test.expectStatusException
 import com.github.jntakpe.users.dao.UserDao
+import com.github.jntakpe.users.dao.UserDao.TransientData
 import com.github.jntakpe.users.model.entity.User
 import com.github.jntakpe.users.repository.UserRepository
 import com.mongodb.MongoWriteException
@@ -36,8 +37,6 @@ internal class UserServiceTest(
     @Named("users") private val rawCache: RedisCache,
 ) {
 
-    private val mockedCache = mockkClass(RedisReactiveCache::class, relaxed = true)
-
     @BeforeEach
     fun setup() {
         dao.init()
@@ -56,8 +55,7 @@ internal class UserServiceTest(
     @ArgumentsSource(UserDao.PersistedData::class)
     fun `find by id should call repository since cache miss`(user: User) {
         val repoSpy = spyk(userRepository)
-        val cacheSpy = spyk(usersCache)
-        UserService(repoSpy, cacheSpy).findById(user.id).test()
+        UserService(repoSpy, usersCache).findById(user.id).test()
             .expectNext(user)
             .then {
                 verify { repoSpy.findById(user.id) }
@@ -72,8 +70,7 @@ internal class UserServiceTest(
     fun `find by id should not call repository since retrieved from cache`(user: User) {
         rawCache.put(user.id, user)
         val repoSpy = spyk(userRepository)
-        val cacheSpy = spyk(usersCache)
-        UserService(repoSpy, cacheSpy).findById(user.id).test()
+        UserService(repoSpy, usersCache).findById(user.id).test()
             .expectNext(user)
             .then {
                 verify { repoSpy.findById(user.id) wasNot Called }
@@ -83,7 +80,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.TransientData::class)
+    @ArgumentsSource(TransientData::class)
     fun `find by id fail when user does not exists`(user: User) {
         service.findById(user.id).test()
             .expectStatusException(Status.NOT_FOUND)
@@ -102,8 +99,7 @@ internal class UserServiceTest(
     @ArgumentsSource(UserDao.PersistedData::class)
     fun `find by username should call repository since cache miss`(user: User) {
         val repoSpy = spyk(userRepository)
-        val cacheSpy = spyk(usersCache)
-        UserService(repoSpy, cacheSpy).findByUsername(user.username).test()
+        UserService(repoSpy, usersCache).findByUsername(user.username).test()
             .expectNext(user)
             .then {
                 verify { repoSpy.findByUsername(user.username) }
@@ -118,8 +114,7 @@ internal class UserServiceTest(
     fun `find by username should not call repository since retrieved from cache`(user: User) {
         rawCache.put(user.username, user)
         val repoSpy = spyk(userRepository)
-        val cacheSpy = spyk(usersCache)
-        UserService(repoSpy, cacheSpy).findByUsername(user.username).test()
+        UserService(repoSpy, usersCache).findByUsername(user.username).test()
             .expectNext(user)
             .then {
                 verify { repoSpy.findByUsername(user.username) wasNot Called }
@@ -129,7 +124,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.TransientData::class)
+    @ArgumentsSource(TransientData::class)
     fun `find by username fail when user does not exists`(user: User) {
         service.findByUsername(user.username).test()
             .expectStatusException(Status.NOT_FOUND)
@@ -137,7 +132,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.TransientData::class)
+    @ArgumentsSource(TransientData::class)
     fun `create should return created document`(user: User) {
         service.create(user).test()
             .expectNext(user)
@@ -145,7 +140,7 @@ internal class UserServiceTest(
     }
 
     @ParameterizedTest
-    @ArgumentsSource(UserDao.TransientData::class)
+    @ArgumentsSource(TransientData::class)
     fun `create should put item in cache`(user: User) {
         val retrieveWithId = { rawCache.get(user.id, User::class.java) }
         val retrieveWithUsername = { rawCache.get(user.username, User::class.java) }
@@ -174,7 +169,7 @@ internal class UserServiceTest(
         val exception = MongoWriteException(WriteError(999, "", BsonDocument.parse("{}")), ServerAddress("localhost"))
         every { mockedRepository.create(any()) } returns exception.toMono()
         every { mockedRepository.create(any()) } returns exception.toMono()
-        UserService(mockedRepository, mockedCache).create(UserDao.TransientData.data().first()).test()
+        UserService(mockedRepository, mockkClass(RedisReactiveCache::class, relaxed = true)).create(TransientData.data().first()).test()
             .expectStatusException(Status.INTERNAL)
             .verify()
     }
@@ -183,7 +178,7 @@ internal class UserServiceTest(
     fun `create should fail with internal code when exception differs from mongo exception`() {
         val mockedRepository = mockkClass(UserRepository::class)
         every { mockedRepository.create(any()) } returns NullPointerException("Oops").toMono()
-        UserService(mockedRepository, mockedCache).create(UserDao.TransientData.data().first()).test()
+        UserService(mockedRepository, mockkClass(RedisReactiveCache::class, relaxed = true)).create(TransientData.data().first()).test()
             .expectStatusException(Status.INTERNAL)
             .verify()
     }
