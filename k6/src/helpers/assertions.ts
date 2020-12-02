@@ -23,14 +23,6 @@ export function isArray(response) {
     return Array.isArray(body(response));
 }
 
-export function hasSize(response, expectedSize: number) {
-    return isArray(response) && (body(response) as any).length === expectedSize;
-}
-
-export function hasAtLeastSize(response, expectedSize: number) {
-    return isArray(response) && (body(response) as any).length >= expectedSize;
-}
-
 export function hasId(response): boolean {
     const responseId = body(response)?.id?.toString();
     return responseId && RegExp('^[0-9a-f]{24}\$').test(responseId);
@@ -38,8 +30,4 @@ export function hasId(response): boolean {
 
 export function sameId(response, expectedId: string): boolean {
     return hasId(response) && expectedId === bodyId(response);
-}
-
-function isGrpcOK(response) {
-    return response.status === grpc.StatusOK
 }
