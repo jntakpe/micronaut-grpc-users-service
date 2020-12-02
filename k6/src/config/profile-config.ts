@@ -1,5 +1,5 @@
-import {Profile} from './profile';
-import {Options} from 'k6/options';
+import { Profile } from './profile';
+import { Options } from 'k6/options';
 
 export type ExtendedOptions = Partial<Options> & InitDataOptions;
 
@@ -7,6 +7,7 @@ interface InitDataOptions {
     callInterval: number;
     init: number,
     findIterations: number,
+    rest: boolean
 }
 
 export function profileConfig(): ExtendedOptions {
@@ -27,17 +28,23 @@ export function profile(): Profile {
     return Profile[envProfile];
 }
 
+function apiTypeConfig(): { rest: boolean } {
+    return {rest: (__ENV.rest !== 'false' && !!__ENV.rest),}
+}
+
 function smokeConfiguration(): ExtendedOptions {
     return {
+        ...apiTypeConfig(),
         callInterval: 0,
         init: envNumberVar('init_iter') || 0,
-        findIterations: envNumberVar('find_iter') || 1
+        findIterations: envNumberVar('find_iter') || 1,
     };
 }
 
 function loadConfiguration(): ExtendedOptions {
     const networkLatency = envNumberVar('network_latency') || 0;
     return {
+        ...apiTypeConfig(),
         stages: [
             {duration: '30s', target: envNumberVar('plateau_target') || 200},
             {duration: __ENV.plateau_duration || '2m', target: envNumberVar('plateau_target') || 200},
@@ -49,12 +56,13 @@ function loadConfiguration(): ExtendedOptions {
         callInterval: envNumberVar('call_interval') || 1,
         teardownTimeout: '5m',
         init: envNumberVar('init_iter') || 100,
-        findIterations: envNumberVar('find_iter') || 10
+        findIterations: envNumberVar('find_iter') || 10,
     };
 }
 
 function stressConfiguration(): ExtendedOptions {
     return {
+        ...apiTypeConfig(),
         stages: [
             {duration: '30s', target: envNumberVar('plateau_target') || 20},
             {duration: __ENV.plateau_duration || '2m', target: envNumberVar('plateau_target') || 20},
@@ -63,12 +71,13 @@ function stressConfiguration(): ExtendedOptions {
         callInterval: 0,
         teardownTimeout: '5m',
         init: envNumberVar('init_iter') || 100,
-        findIterations: envNumberVar('find_iter') || 10
+        findIterations: envNumberVar('find_iter') || 10,
     };
 }
 
 function soakConfiguration(): ExtendedOptions {
     return {
+        ...apiTypeConfig(),
         stages: [
             {duration: '30m', target: envNumberVar('plateau_target') || 200},
             {duration: __ENV.plateau_duration || '4h', target: envNumberVar('plateau_target') || 200},
@@ -77,7 +86,7 @@ function soakConfiguration(): ExtendedOptions {
         callInterval: 1,
         teardownTimeout: '5m',
         init: envNumberVar('init_iter') || 10,
-        findIterations: envNumberVar('find_iter') || 10
+        findIterations: envNumberVar('find_iter') || 10,
     };
 }
 

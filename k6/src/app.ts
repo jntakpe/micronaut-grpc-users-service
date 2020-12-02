@@ -5,6 +5,7 @@ import { checkInterval, rangeVuIterSuffix } from './helpers/utils';
 import { conflictResponseChecks, createResponseChecks, notFoundResponseChecks, okResponseChecks } from './helpers/checks';
 import { isOk } from './helpers/assertions';
 import { UsersGrpcApi } from './apis/users-grpc-api';
+import { UsersRestApi } from './apis/users-rest-api';
 
 export const options = profileConfig();
 
@@ -23,8 +24,7 @@ export default () => {
 
 function userLifecycle(user) {
     const interval = options.callInterval;
-    const userApi = new UsersGrpcApi();
-    // or const userApi = new UsersRestApi();
+    const userApi = options.rest ? new UsersRestApi() : new UsersGrpcApi();
     return group(`User lifecycle`, () => {
         const createdUser = userCreation(userApi, user, interval);
         if (createdUser) {
