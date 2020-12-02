@@ -55,7 +55,7 @@ function userCreation(userApi: UsersApi, user, interval: number) {
 }
 
 function missingUser(userApi: UsersApi, interval: number) {
-    group('Error when by does not exists', () => {
+    group('Error when user id does not exists', () => {
         checkInterval(interval, userApi.findById('123456789012345678901234'), notFoundResponseChecks);
     });
 }
