@@ -89,7 +89,7 @@ internal class UsersEndpointTest(
     @Test
     fun `create should fail when missing username`() {
         val request = UserRequest {
-            email = "jdoe@gmail.com"
+            email = "jdoe@mail.com"
             countryCode = "FR"
         }
         catchThrowable { stub.create(request) }.assertStatusException(Status.INVALID_ARGUMENT)
