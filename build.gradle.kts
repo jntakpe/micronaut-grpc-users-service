@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.google.cloud.tools.jib.gradle.JibTask
 import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.id
 import com.google.protobuf.gradle.plugins
@@ -8,8 +9,10 @@ import io.micronaut.gradle.MicronautRuntime.NONE
 import io.micronaut.gradle.MicronautTestRuntime.JUNIT_5
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.util.prefixIfNot
+import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import java.nio.file.StandardOpenOption
 
 val commonsVersion: String by project
@@ -19,6 +22,7 @@ val kMongoVersion: String by project
 val basePackage = "com.github.jntakpe"
 val protoDescriptorPath = "$buildDir/generated/proto.pb"
 val grpcServices = listOf("users.UsersService")
+val grpcHealthProbeDir = "$buildDir/tmp/bin/"
 
 plugins {
     idea
@@ -30,12 +34,12 @@ plugins {
     kotlin("plugin.allopen") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     id("com.google.protobuf") version "0.8.13"
-    id("io.micronaut.application") version "1.1.0"
+    id("io.micronaut.application") version "1.2.0"
     id("com.google.cloud.tools.jib") version "2.6.0"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
-version = "0.1.8"
+version = "0.1.8-RC1"
 group = "com.github.jntakpe"
 
 repositories {
@@ -57,16 +61,16 @@ micronaut {
 }
 
 dependencies {
-    kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     kapt("io.micronaut:micronaut-inject-java")
     kapt("org.litote.kmongo:kmongo-annotation-processor:$kMongoVersion")
+    implementation(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation("io.micronaut:micronaut-core:2.2.1")
     implementation("com.github.jntakpe:commons-cache:$commonsVersion")
     implementation("com.github.jntakpe:commons-grpc:$commonsVersion")
     implementation("com.github.jntakpe:commons-management:$commonsVersion")
     implementation("com.github.jntakpe:commons-micronaut:$commonsVersion")
     implementation("com.github.jntakpe:commons-mongo:$commonsVersion")
     runtimeOnly("ch.qos.logback:logback-classic")
-    kaptTest(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     kaptTest("io.micronaut:micronaut-inject-java")
     testImplementation("com.github.jntakpe:commons-cache-test:$commonsVersion")
     testImplementation("com.github.jntakpe:commons-mongo-test:$commonsVersion")
@@ -138,6 +142,14 @@ jib {
     to {
         image = "eu.gcr.io/equidis/micronaut-users:${project.version}"
     }
+    extraDirectories {
+        paths {
+            path {
+                setFrom(grpcHealthProbeDir)
+                into = "/bin"
+            }
+        }
+    }
 }
 
 tasks {
@@ -185,6 +197,9 @@ tasks {
     assemble {
         dependsOn(deploymentZip)
     }
+    withType<JibTask> {
+        doFirst { downloadHealthProbeBinary() }
+    }
 }
 val protoJar = tasks.register<Jar>("protoJar") {
     dependsOn(tasks.jar)
@@ -216,4 +231,11 @@ fun RepositoryHandler.mavenGithub(repository: String) = maven {
         username = githubActor
         password = githubToken
     }
+}
+
+fun downloadHealthProbeBinary() {
+    val probeVersion = "v0.3.5"
+    val url = URL("https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${probeVersion}/grpc_health_probe-linux-amd64")
+    Files.createDirectories(Paths.get(grpcHealthProbeDir))
+    Files.copy(url.openStream(), Paths.get(grpcHealthProbeDir, "grpc_health_probe"), StandardCopyOption.REPLACE_EXISTING)
 }
