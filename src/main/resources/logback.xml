@@ -13,4 +13,5 @@
 
     <logger name="com.github.jntakpe" level="DEBUG"/>
     <logger name="org.mongodb" level="WARN"/>
+    <logger name="io.lettuce" level="WARN"/>
 </configuration>
