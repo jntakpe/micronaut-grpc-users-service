@@ -61,6 +61,7 @@ micronaut {
 }
 
 dependencies {
+    kapt(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
     kapt("io.micronaut:micronaut-inject-java")
     kapt("org.litote.kmongo:kmongo-annotation-processor:$kMongoVersion")
     implementation(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
@@ -70,6 +71,7 @@ dependencies {
     implementation("com.github.jntakpe:commons-micronaut:$commonsVersion")
     implementation("com.github.jntakpe:commons-mongo:$commonsVersion")
     runtimeOnly("ch.qos.logback:logback-classic")
+    kaptTest(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
     kaptTest("io.micronaut:micronaut-inject-java")
     testImplementation("com.github.jntakpe:commons-cache-test:$commonsVersion")
     testImplementation("com.github.jntakpe:commons-mongo-test:$commonsVersion")
