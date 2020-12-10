@@ -23,6 +23,7 @@ val basePackage = "com.github.jntakpe"
 val protoDescriptorPath = "$buildDir/generated/proto.pb"
 val grpcServices = listOf("users.UsersService")
 val grpcHealthProbeDir = "$buildDir/tmp/bin/"
+val probeExecName = "grpc_health_probe"
 
 plugins {
     idea
@@ -150,6 +151,7 @@ jib {
                 into = "/bin"
             }
         }
+        permissions = mapOf("/bin/${probeExecName}" to "755")
     }
 }
 
@@ -236,7 +238,7 @@ fun RepositoryHandler.mavenGithub(repository: String) = maven {
 
 fun downloadHealthProbeBinary() {
     val probeVersion = "v0.3.5"
-    val url = URL("https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${probeVersion}/grpc_health_probe-linux-amd64")
+    val url = URL("https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${probeVersion}/${probeExecName}-linux-amd64")
     Files.createDirectories(Paths.get(grpcHealthProbeDir))
-    Files.copy(url.openStream(), Paths.get(grpcHealthProbeDir, "grpc_health_probe"), StandardCopyOption.REPLACE_EXISTING)
+    Files.copy(url.openStream(), Paths.get(grpcHealthProbeDir, probeExecName), StandardCopyOption.REPLACE_EXISTING)
 }
