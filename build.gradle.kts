@@ -40,7 +40,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
-version = "0.1.9-RC1"
+version = "0.1.9-RC2"
 group = "com.github.jntakpe"
 
 repositories {
