@@ -71,6 +71,7 @@ dependencies {
     implementation("com.github.jntakpe:commons-management:$commonsVersion")
     implementation("com.github.jntakpe:commons-micronaut:$commonsVersion")
     implementation("com.github.jntakpe:commons-mongo:$commonsVersion")
+    implementation("com.github.jntakpe:commons-tracing:$commonsVersion")
     runtimeOnly("ch.qos.logback:logback-classic")
     kaptTest(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
     kaptTest("io.micronaut:micronaut-inject-java")
