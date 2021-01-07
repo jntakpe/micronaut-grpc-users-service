@@ -187,6 +187,10 @@ tasks {
         app:
           name: ${project.name}
           version: ${project.version}
+          kind: grpc
+          dependencies:
+            mongodb: true
+            redis: true
         image:
           name: micronaut-${project.name}
         api:
