@@ -238,7 +238,7 @@ fun RepositoryHandler.mavenGithub(repository: String) = maven {
 }
 
 fun downloadHealthProbeBinary() {
-    val probeVersion = "v0.3.5"
+    val probeVersion = "v0.3.6"
     val url = URL("https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${probeVersion}/${probeExecName}-linux-amd64")
     Files.createDirectories(Paths.get(grpcHealthProbeDir))
     Files.copy(url.openStream(), Paths.get(grpcHealthProbeDir, probeExecName), StandardCopyOption.REPLACE_EXISTING)
