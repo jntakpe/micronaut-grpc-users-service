@@ -24,6 +24,7 @@ val protoDescriptorPath = "$buildDir/generated/proto.pb"
 val grpcServices = listOf("users.UsersService")
 val grpcHealthProbeDir = "$buildDir/tmp/bin/"
 val probeExecName = "grpc_health_probe"
+val gcloudProjectId = System.getenv("GCP_PROJECT_ID") ?: "gcloud-equidis"
 
 plugins {
     idea
@@ -143,7 +144,7 @@ protobuf {
 
 jib {
     to {
-        image = "eu.gcr.io/equidis/micronaut-users:${project.version}"
+        image = "eu.gcr.io/$gcloudProjectId/micronaut-users:${project.version}"
     }
     from {
         image = "gcr.io/distroless/java:11"
