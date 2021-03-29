@@ -109,7 +109,7 @@ protobuf {
     }
     plugins {
         id(grpcId) {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.35.0"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.36.1"
         }
         id(javaPgvId) {
             artifact = "io.envoyproxy.protoc-gen-validate:protoc-gen-validate:0.4.1"
